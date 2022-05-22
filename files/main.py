@@ -12,9 +12,10 @@ ___________________________________
  - Licence : GNU GPL v3
 '''
 
-import s_lexer
-import s_parser
-import s_compiler
+from s_lexer import Lexer
+from s_parser import Parser
+from s_compiler import Compiler
 
 # LEXER -token-> PARSE -ast-> COMPILER -cpp->
 
+version = "m-0.1"
