@@ -16,13 +16,18 @@ from core.lexer import Lexer
 from core.parser import Parser
 from core.compiler import Compiler
 
+import mod.cytron as cytron
+
 """
 LEXER -token-> PARSE -ast-> COMPILER -cpp->
 """
 
 version = "m-0.1"
 
+FILE = cytron.rfil("./_ks", "main.ks")
+
+print(FILE)
 
 TOKEN = Lexer()
 AST = Parser()
-COMPILER = Compiler()
+EXIT = Compiler()
