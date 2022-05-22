@@ -12,10 +12,17 @@ ___________________________________
  - Licence : GNU GPL v3
 '''
 
-from s_lexer import Lexer
-from s_parser import Parser
-from s_compiler import Compiler
+from core.lexer import Lexer
+from core.parser import Parser
+from core.compiler import Compiler
 
-# LEXER -token-> PARSE -ast-> COMPILER -cpp->
+"""
+LEXER -token-> PARSE -ast-> COMPILER -cpp->
+"""
 
 version = "m-0.1"
+
+
+TOKEN = Lexer()
+AST = Parser()
+COMPILER = Compiler()

@@ -12,4 +12,6 @@ ___________________________________
  - Licence : GNU GPL v3
 '''
 
-version = "p-0.1"
+version = "c-0.1"
+
+class Compiler: ...

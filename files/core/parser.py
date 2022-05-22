@@ -12,4 +12,6 @@ ___________________________________
  - Licence : GNU GPL v3
 '''
 
-version = "l-0.1"
+version = "p-0.1"
+
+class Parser: ...
