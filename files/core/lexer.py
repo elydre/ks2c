@@ -12,6 +12,11 @@ ___________________________________
  - Licence : GNU GPL v3
 '''
 
-version = "l-0.1"
+version = "l-0.2"
 
-class Lexer: ...
+class Lexer:
+    def __init__(self, file: str) -> None:
+        self.brut = file
+
+    def run(self):
+        pass
