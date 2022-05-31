@@ -12,11 +12,13 @@ ___________________________________
  - Licence : GNU GPL v3
 '''
 
-version = "l-0.2"
+from mod.segmenteur import launch_segmenter as segmenter
+
+version = "l-0.4"
 
 class Lexer:
     def __init__(self, file: str) -> None:
         self.brut = file
 
     def run(self):
-        pass
+        return segmenter(self.brut)
