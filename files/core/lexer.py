@@ -20,6 +20,7 @@ class Lexer:
     def __init__(self, file: str) -> None:
         self.brut = file
 
+
     def analyse(self, edit: str) -> dict:
         dico = {
             "in_push": 0,
@@ -68,6 +69,7 @@ class Lexer:
                 sortie.extend(self.split_push(e))
         return sortie
 
+
     def sup_space(self, e: str) -> str:
         in_string = False
         out = ""
@@ -78,6 +80,7 @@ class Lexer:
                 continue
             out += car
         return out
+
 
     def run(self):
         seg = self.sup_space(self.brut)
