@@ -2,9 +2,9 @@
 
 syntactic compiler from ks to cpp
 
-[![Sourcery](https://img.shields.io/badge/Sourcery-enabled-brightgreen)](https://sourcery.ai)
+[![Sourcery](https://img.shields.io/badge/sourcery-enabled-brightgreen)](https://sourcery.ai)
 [![Sonar Cube Static Analysis](https://sonarcloud.io/api/project_badges/measure?project=elydre_ks2cpp&metric=ncloc)](https://sonarcloud.io/dashboard?id=elydre_ks2cpp)
-[![wki](https://img.shields.io/badge/esolang-wiki-lightgray)](https://esolangs.org/wiki/kS)
+[![Wiki](https://img.shields.io/badge/esolang-wiki-lightgray)](https://esolangs.org/wiki/kS)
 
 ## About
 
