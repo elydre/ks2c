@@ -14,15 +14,15 @@ ___________________________________
 
 from core.lexer import Lexer
 from core.parser import Parser
-from core.compiler import Compiler
+from core.generator import Generator
 
 import mod.cytron as cytron
 
 """
-LEXER -token-> PARSE -ast-> COMPILER -cpp->
+LEXER -token-> PARSER -ast-> GENERATOR -> cpp
 """
 
-version = "m-0.4"
+version = "m-0.5"
 
 file = cytron.rfil("./_ks", "main.ks")
 

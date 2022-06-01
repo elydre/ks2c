@@ -12,6 +12,6 @@ ___________________________________
  - Licence : GNU GPL v3
 '''
 
-version = "c-0.1"
+version = "g-0.1"
 
-class Compiler: ...
+class Generator: ...
