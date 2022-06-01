@@ -14,25 +14,25 @@ ___________________________________
 
 from mod.segmenteur import launch_segmenter as segmenter
 
-version = "l-0.5"
+version = "l-0.6"
 
 class Lexer:
-    def __init__(self, file: str) -> None:
+    def __init__(self, file: str, debug: bool = False) -> None:
         self.brut = file
-
+        self.debug = False
 
     def analyse(self, edit: str) -> dict:
         dico = {
-            "in_push": 0,
-            "out_push": 0,
-            "code": "",
+            "iph": 0,
+            "oph": 0,
+            "cde": "",
         }
         is_in = 1
         for car in edit:
             if car == ">":
-                dico["in_push" if is_in else "out_push"] += 1
+                dico["iph" if is_in else "oph"] += 1
             else:
-                dico["code"] += car
+                dico["cde"] += car
                 is_in = 0
 
         return dico
@@ -52,7 +52,7 @@ class Lexer:
                 in_push = True
             if in_push and car != ">":
                 sortie.append(self.analyse(code_to_analyse))
-                code_to_analyse = code_to_analyse[-sortie[-1]["out_push"]:]
+                code_to_analyse = code_to_analyse[-sortie[-1]["oph"]:]
                 in_push = False
             code_to_analyse += car
 
@@ -82,9 +82,11 @@ class Lexer:
         return out
 
 
-    def run(self):
+    def run(self) -> list:
         seg = self.sup_space(self.brut)
-        print(seg)
+        if self.debug: print(seg)
         seg = segmenter(seg)
-        print(seg)
-        return self.lexing(seg)
+        if self.debug: print(seg)
+        seg = self.lexing(seg)
+        if self.debug: print(seg)
+        return seg

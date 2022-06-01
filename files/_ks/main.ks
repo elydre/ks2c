@@ -1,1 +1,1 @@
-(1, 0 >> or), 1 >> and > print
+1 > print
