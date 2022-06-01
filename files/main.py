@@ -27,5 +27,5 @@ version = "m-0.4"
 file = cytron.rfil("./_ks", "main.ks")
 
 print(file)
-lxr = Lexer(file, debug = True)
+lxr = Lexer(file, debug_lvl=3)
 lxr.run()

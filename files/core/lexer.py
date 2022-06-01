@@ -12,23 +12,24 @@ ___________________________________
  - Licence : GNU GPL v3
 '''
 
-from mod.segmenteur import launch_segmenter as segmenter
-
-version = "l-1.2"
+version = "l-1.3"
 
 class Lexer:
 
     # TODO:
     # - verifier si le nombre de push est correct
-    # - améliorer le debug, plusieur niveaux de debug
     # - gestion des commentaires
     
-    def __init__(self, file: str, debug: bool = False) -> None:
+    def __init__(self, file: str, debug_lvl: int = 0) -> None:
         self.brut = file
-        self.debug = debug
+        self.debug_lvl = debug_lvl
         self.op = "+-*/^=!"
 
-    
+    def debug_print(self, fonc_name: str, text: str, level: int) -> None:
+        if self.debug_lvl >= level:
+            print(f"{level}| {fonc_name} : {text}")
+
+
     def get_type(self, cde: str) -> dict:
         dico = {
             "type": "func",
@@ -61,6 +62,7 @@ class Lexer:
         temp = ""
         in_string, in_op = False, False
         for car in cde:
+            self.debug_print("cut_operators", f"{temp}.{car} in_string={in_string} in_op={in_op}", 3)
             if car in ["\"", "'"]:
                 in_string = not in_string
             if in_string:
@@ -68,17 +70,19 @@ class Lexer:
                 continue
             if car in self.op:
                 if not in_op:
-                    out.append(self.get_type(temp))
+                    if temp: out.append(self.get_type(temp))
                     temp, in_op = "", True
             elif in_op:
                 in_op = False
                 out.append(self.get_type(temp))
                 temp = ""
             temp += car
-        out.append(self.get_type(temp))
+        if temp: out.append(self.get_type(temp))
+        self.debug_print("cut_operators", f"{out}", 2)
         return out
 
     def analyse(self, edit: str) -> dict:
+        self.debug_print("analyse", f"{edit}", 2)
         dico = {
             "iph": 0,
             "oph": 0,
@@ -92,8 +96,8 @@ class Lexer:
                 dico["cde"] += car
                 is_in = 0
 
-        dico["cde"] = [self.cut_operators(e) for e in dico["cde"].split(",")]
-
+        dico["cde"] = [self.cut_operators(e) for e in dico["cde"].split(",") if e]
+        self.debug_print("analyse", f"{dico}", 2)
         return dico
 
 
@@ -103,6 +107,7 @@ class Lexer:
         in_push = False
         code_to_analyse = ""
         for car in e:
+            self.debug_print("split_push", f"{code_to_analyse}.{car} in_string={in_string} in_push={in_push}", 3)
             if car in ["\"", "'"]:
                 in_string = not in_string
             if in_string:
@@ -111,24 +116,16 @@ class Lexer:
             if car == ">":
                 in_push = True
             if in_push and car != ">":
-                sortie.append(self.analyse(code_to_analyse))
-                code_to_analyse = code_to_analyse[-sortie[-1]["oph"]:]
+                if sum(c != ">" for c in code_to_analyse):
+                    sortie.append(self.analyse(code_to_analyse))
+                    code_to_analyse = code_to_analyse[-sortie[-1]["oph"]:]
+
                 in_push = False
             code_to_analyse += car
 
         sortie.append(self.analyse(code_to_analyse))
+        self.debug_print("split_push", f"{sortie}", 2)
         return sortie
-
-
-    def lexing(self, seg: list) -> list:
-        sortie = []
-        for e in seg:
-            if type(e) == list:
-                sortie.append(self.lexing(e))
-            else:
-                sortie.extend(self.split_push(e))
-        return sortie
-
 
     def sup_space(self, e: str) -> str:
         # supression des espaces et gestion des sauts de ligne
@@ -142,7 +139,7 @@ class Lexer:
             out += car
 
         out = out.replace("\n", ";").replace("\t", "")
-        if self.debug: print(out)
+        self.debug_print("sup_space", f"{out}", 2)
         while ";;" in out:
             out = out.replace(";;", ";")
 
@@ -151,14 +148,12 @@ class Lexer:
 
     def run(self) -> list:
         seg = self.sup_space(self.brut)
-        if self.debug: print(seg)
+        self.debug_print("run", f"{seg}", 1)
         out = []
         for e in seg:
-            tmp = segmenter(e)
-            if self.debug: print(tmp)
-            tmp = self.lexing(tmp)
-            if self.debug: print(tmp)
+            tmp = self.split_push(e)
+            self.debug_print("run (lexing)", f"{e}", 1)
             out.append(tmp)
 
-        if self.debug: print(out)
+        self.debug_print("run (out)", f"{out}", 1)
         return out
