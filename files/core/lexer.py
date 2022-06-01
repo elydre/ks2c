@@ -14,18 +14,19 @@ ___________________________________
 
 from mod.segmenteur import launch_segmenter as segmenter
 
-version = "l-1.1"
+version = "l-1.2"
 
 class Lexer:
 
     # TODO:
     # - verifier si le nombre de push est correct
-    # - améliorer le debug
+    # - améliorer le debug, plusieur niveaux de debug
     # - gestion des commentaires
-
+    
     def __init__(self, file: str, debug: bool = False) -> None:
         self.brut = file
         self.debug = debug
+        self.op = "+-*/^=!"
 
     
     def get_type(self, cde: str) -> dict:
@@ -43,14 +44,39 @@ class Lexer:
         elif all(char in "0123456789" for char in cde):
             dico["type"] = "int"
 
+
         elif all(char in "0123456789." for char in cde):
             dico["type"] = "float"
 
+        elif all(char in self.op for char in cde):
+            dico["type"] = "op"
+
         elif cde[0] == "$":
             dico["type"] = "var"
-        
+
         return dico
 
+    def cut_operators(self, cde: str) -> list:
+        out = []
+        temp = ""
+        in_string, in_op = False, False
+        for car in cde:
+            if car in ["\"", "'"]:
+                in_string = not in_string
+            if in_string:
+                temp += car
+                continue
+            if car in self.op:
+                if not in_op:
+                    out.append(self.get_type(temp))
+                    temp, in_op = "", True
+            elif in_op:
+                in_op = False
+                out.append(self.get_type(temp))
+                temp = ""
+            temp += car
+        out.append(self.get_type(temp))
+        return out
 
     def analyse(self, edit: str) -> dict:
         dico = {
@@ -66,7 +92,7 @@ class Lexer:
                 dico["cde"] += car
                 is_in = 0
 
-        dico["cde"] = [self.get_type(e) for e in dico["cde"].split(",")]
+        dico["cde"] = [self.cut_operators(e) for e in dico["cde"].split(",")]
 
         return dico
 
@@ -80,6 +106,7 @@ class Lexer:
             if car in ["\"", "'"]:
                 in_string = not in_string
             if in_string:
+                code_to_analyse += car
                 continue
             if car == ">":
                 in_push = True

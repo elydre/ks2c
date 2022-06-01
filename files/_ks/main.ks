@@ -1,1 +1,1 @@
-1, 0 >> $a, $b >> and > print
+"2" == 3 > print
