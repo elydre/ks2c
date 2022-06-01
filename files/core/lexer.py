@@ -14,12 +14,18 @@ ___________________________________
 
 from mod.segmenteur import launch_segmenter as segmenter
 
-version = "l-0.6"
+version = "l-1.0"
 
 class Lexer:
+
+    # TODO:
+    # - verifier si le nombre de push est correct
+    # - améliorer le debug
+
     def __init__(self, file: str, debug: bool = False) -> None:
         self.brut = file
         self.debug = False
+
 
     def analyse(self, edit: str) -> dict:
         dico = {
@@ -34,6 +40,8 @@ class Lexer:
             else:
                 dico["cde"] += car
                 is_in = 0
+
+        dico["cde"] = dico["cde"].split(",")
 
         return dico
 
