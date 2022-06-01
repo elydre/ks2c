@@ -1,1 +1,1 @@
-1, 0 >> and > print
+1, 0 >> $a, $b >> and > print

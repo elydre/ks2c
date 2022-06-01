@@ -28,4 +28,4 @@ file = cytron.rfil("./_ks", "main.ks")
 
 print(file)
 lxr = Lexer(file, debug = True)
-print(lxr.run())
+lxr.run()
