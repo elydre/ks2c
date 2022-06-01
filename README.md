@@ -6,6 +6,7 @@ syntactic compiler from ks to cpp
 [![Wiki](https://img.shields.io/badge/esolang-wiki-lightgray)](https://esolangs.org/wiki/kS)
 [![Github Project](https://img.shields.io/badge/project-open-lightgray)](https://github.com/elydre/ks2cpp/projects/2)
 [![dif10](https://img.shields.io/badge/dif10-5.5-lightgray)](https://pf4.ddns.net/dif10/)
+[![version](https://img.shields.io/badge/version-last-lightgray)](https://github.com/elydre/ks2cpp/blob/main/version_history.md)
 
 ## About
 
