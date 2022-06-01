@@ -12,7 +12,7 @@ ___________________________________
  - Licence : GNU GPL v3
 '''
 
-version = "l-1.3"
+version = "l-1.4"
 
 class Lexer:
 
@@ -24,6 +24,7 @@ class Lexer:
         self.brut = file
         self.debug_lvl = debug_lvl
         self.op = "+-*/^=!"
+        self.keywords = ["LOOP", "IF", "END", "BREAK", "FUNC", "RETURN"]
 
     def debug_print(self, fonc_name: str, text: str, level: int) -> None:
         if self.debug_lvl >= level:
@@ -36,15 +37,18 @@ class Lexer:
             "cnt": cde,
         }
 
+
         if cde[0] == cde[-1] and cde[0] in ["\"", "'"]:
             dico["type"] = "string"
+
+        elif cde in self.keywords:
+            dico["type"] = "keyword"
 
         elif cde in {"True", "False", "true", "false"}:
             dico["type"] = "bool"
 
         elif all(char in "0123456789" for char in cde):
             dico["type"] = "int"
-
 
         elif all(char in "0123456789." for char in cde):
             dico["type"] = "float"
