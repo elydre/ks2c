@@ -5,6 +5,8 @@ syntactic compiler from ks to cpp
 [![Sourcery](https://img.shields.io/badge/sourcery-enabled-brightgreen)](https://sourcery.ai)
 [![Sonar Cube Static Analysis](https://sonarcloud.io/api/project_badges/measure?project=elydre_ks2cpp&metric=ncloc)](https://sonarcloud.io/dashboard?id=elydre_ks2cpp)
 [![Wiki](https://img.shields.io/badge/esolang-wiki-lightgray)](https://esolangs.org/wiki/kS)
+[![Size](https://img.shields.io/github/repo-size/elydre/ks2cpp)](https://github.com/elydre/ks2cpp)
+[![Github Project](https://img.shields.io/badge/project-open-brightgreen)](https://github.com/elydre/ks2cpp/projects/2)
 
 ## About
 
