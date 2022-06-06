@@ -12,7 +12,7 @@ syntactic compiler from ks to cpp
 
 The [KS (KEA-stream)](https://kea-corp.github.io/stream/) is an [esolang](https://esolangs.org/wiki/Main_Page) designed to simplify the [KEA](https://kea-corp.github.io), a [modal](https://kea-corp.github.io/doc/modes.html) [interpreted](https://github.com/KEA-corp/KEA-php) esolang.
 ```
-KS => ks2kea => KEA => interpeter
+KS => ks2kea => KEA => interpreter
 ```
 
 However the KEA remains slow, so instead of compiling the KS to KEA why not do it to C++

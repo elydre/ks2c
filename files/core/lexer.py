@@ -132,7 +132,7 @@ class Lexer:
         return sortie
 
     def sup_space(self, e: str) -> str:
-        # supression des espaces et gestion des sauts de ligne
+        # suppression des espaces et gestion des sauts de ligne
         in_string = False
         out = ""
         for car in e:
