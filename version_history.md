@@ -1,5 +1,5 @@
-|                                          release                                          |  main   |  lexer  | parser  |generator| status |
-|-------------------------------------------------------------------------------------------|---------|---------|---------|---------|--------|
+|                          release                         |  main   |  lexer  | parser  |generator| status |
+|----------------------------------------------------------|---------|---------|---------|---------|--------|
 | [0.0.1](https://github.com/elydre/ks2cpp/commit/2915015) | m-0.1 • | l-0.1 • | p-0.1 • | g-0.1 • |  dev   |
 | [0.0.2](https://github.com/elydre/ks2cpp/commit/6eb424d) | m-0.2 • | l-0.1   | p-0.1   | g-0.1   |  dev   |
 | [0.0.3](https://github.com/elydre/ks2cpp/commit/88a7c41) | m-0.3 • | l-0.2 • | p-0.1   | g-0.1   |  dev   |
