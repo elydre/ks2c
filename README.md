@@ -19,3 +19,33 @@ However the KEA remains slow, so instead of compiling the KS to KEA why not do i
 ```
 KS => ks2cpp => C++ => g++ => out-file
 ```
+
+## tree
+
+```
+ks2cpp
+│   .gitignore
+│   LICENSE
+│   README.md
+│   sonar-project.properties
+│   version_history.md
+│
+├───.github
+│   └───workflows
+│           build.yml
+│
+└───files
+    │   main.py
+    │
+    ├───core
+    │       generator.py
+    │       lexer.py
+    │       parser.py
+    │
+    ├───mod
+    │       cytron.py
+    │       tools.py
+    │
+    └───_ks
+            main.ks
+```
