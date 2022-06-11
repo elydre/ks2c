@@ -17,7 +17,6 @@ version = "l-1.5"
 class Lexer:
 
     # TODO:
-    # - verifier si le nombre de push est correct
     # - gestion des commentaires
     
     def __init__(self, file: str, debug_lvl: int = 0) -> None:
