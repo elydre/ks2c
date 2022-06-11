@@ -12,7 +12,7 @@ ___________________________________
  - Licence : GNU GPL v3
 '''
 
-version = "l-1.4"
+version = "l-1.5"
 
 class Lexer:
 
@@ -26,9 +26,10 @@ class Lexer:
         self.op = "+-*/=!"
         self.keywords = ["LOOP", "IF", "END", "BREAK", "FUNC", "RETURN"]
 
+
     def debug_print(self, fonc_name: str, text: str, level: int) -> None:
         if self.debug_lvl >= level:
-            print(f"{level}| {fonc_name} : {text}")
+            print(f"LXR - {level}| {fonc_name} : {text}")
 
 
     def get_type(self, cde: str) -> dict:
@@ -154,9 +155,10 @@ class Lexer:
         seg = self.sup_space(self.brut)
         self.debug_print("run", f"{seg}", 1)
         out = []
+        
         for e in seg:
-            tmp = self.split_push(e)
             self.debug_print("run (lexing)", f"{e}", 1)
+            tmp = self.split_push(e)
             out.append(tmp)
 
         self.debug_print("run (out)", f"{out}", 1)

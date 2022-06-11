@@ -22,10 +22,10 @@ import mod.cytron as cytron
 LEXER -token-> PARSER -ast-> GENERATOR -> cpp
 """
 
-version = "m-0.5"
+version = "m-0.6"
 
 file = cytron.rfil("./_ks", "main.ks")
 
 print(file)
 lxr = Lexer(file, debug_lvl=3)
-lxr.run()
+psr = Parser(lxr.run(), debug_lvl=3)

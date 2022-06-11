@@ -1,1 +1,1 @@
-41 + 1 > print
+40 + 2, 24 >> is_inv > print
