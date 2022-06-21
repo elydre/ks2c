@@ -17,7 +17,7 @@ version = "l-1.5"
 class Lexer:
 
     # TODO:
-    # - gestion des commentaires
+    # gestion des commentaires
     
     def __init__(self, file: str, debug_lvl: int = 0) -> None:
         self.brut = file
