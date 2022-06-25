@@ -15,7 +15,7 @@ ___________________________________
 from operator import xor
 
 
-version = "p-0.5"
+version = "p-0.6"
 
 class Parser:
     def __init__(self, inp: list, debug_lvl: int = 0) -> None:
@@ -41,6 +41,7 @@ class Parser:
         if self.debug_lvl >= level:
             print(f"PSR - {level}| {fonc_name} : {text}")
 
+
     def parse_line(self, line: list) -> dict: ...
 
 
@@ -51,8 +52,9 @@ class Parser:
                 for a, b, c in ((dico["iph"], old, 0), (dico["oph"], len(dico["cde"]), 1)):
                     if xor(a != b, (line.index(dico) == len(line) - 1 and c)):
                         print(f"nombre de push non valide: {a} != {b}")
+                        return False
                     old = dico["oph"]
+        return True
 
-    def run(self) -> list:
-        self.check()
-        return [self.parse_line(line) for line in self.inp]
+    def run(self, calm_mod: bool = False) -> list:
+        return [self.parse_line(line) for line in self.inp] if self.check() and not calm_mod else list()
