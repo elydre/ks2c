@@ -12,7 +12,7 @@ ___________________________________
  - Licence : GNU GPL v3
 '''
 
-version = "p-0.3"
+version = "p-0.4"
 
 class Parser:
     def __init__(self, inp: list, debug_lvl: int = 0) -> None:
@@ -37,3 +37,9 @@ class Parser:
     def debug_print(self, fonc_name: str, text: str, level: int) -> None:
         if self.debug_lvl >= level:
             print(f"PSR - {level}| {fonc_name} : {text}")
+
+    def parse_line(self, line):
+        ...
+
+    def run(self):
+        return [self.parse_line(line) for line in self.inp]
