@@ -13,7 +13,7 @@
 | [0.2.1](https://github.com/elydre/ks2cpp/commit/6c51e37) | m-0.5 • | l-1.4   | p-0.1   | g-0.1   |  dev   |
 | [0.2.2](https://github.com/elydre/ks2cpp/commit/0ad6e4f) | m-0.5   | l-1.4   | p-0.2 • | g-0.1   |  dev   |
 | [0.2.3](https://github.com/elydre/ks2cpp/commit/4c8f975) | m-0.6 • | l-1.5 • | p-0.3 • | g-0.1   |  dev   |
-| [0.2.4](https://github.com/elydre/ks2cpp/commit/xxxxxxx) | m-0.6   | l-1.5   | p-0.4 • | g-0.1   |  dev   |
-| [0.2.5](https://github.com/elydre/ks2cpp/commit/xxxxxxx) | m-0.6   | l-1.5   | p-0.5 • | g-0.1   |  dev   |
-| [0.2.6](https://github.com/elydre/ks2cpp/commit/xxxxxxx) | m-0.6   | l-1.5   | p-0.6 • | g-0.1   |  dev   |
-| [0.2.7](https://github.com/elydre/ks2cpp/commit/xxxxxxx) | m-0.6   | l-1.6 • | p-0.7 • | g-0.1   |  dev   |
+| [0.2.4](https://github.com/elydre/ks2cpp/commit/af34281) | m-0.6   | l-1.5   | p-0.4 • | g-0.1   |  dev   |
+| [0.2.5](https://github.com/elydre/ks2cpp/commit/4170e9f) | m-0.6   | l-1.5   | p-0.5 • | g-0.1   |  dev   |
+| [0.2.6](https://github.com/elydre/ks2cpp/commit/a139d72) | m-0.6   | l-1.5   | p-0.6 • | g-0.1   |  dev   |
+| [0.2.7](https://github.com/elydre/ks2cpp/commit/305df8a) | m-0.6   | l-1.6 • | p-0.7 • | g-0.1   |  dev   |
