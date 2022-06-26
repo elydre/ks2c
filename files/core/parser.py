@@ -15,7 +15,7 @@ ___________________________________
 from operator import xor
 
 
-version = "p-0.6"
+version = "p-0.7"
 
 class Parser:
     def __init__(self, inp: list, debug_lvl: int = 0) -> None:
@@ -48,12 +48,15 @@ class Parser:
     def check(self) -> None:
         for line in self.inp:
             old = 0
-            for dico in line:
+            for i in range(len(line)):
+                dico = line[i]
                 for a, b, c in ((dico["iph"], old, 0), (dico["oph"], len(dico["cde"]), 1)):
-                    if xor(a != b, (line.index(dico) == len(line) - 1 and c)):
-                        print(f"nombre de push non valide: {a} != {b}")
-                        return False
-                    old = dico["oph"]
+                    if not xor(a != b, (len(line) - 1 == i and c)):
+                        old = dico["oph"]
+                        continue
+                    print(f"nombre de push non valide: ({a} != {b}) dans ")
+                    print(f"'{''.join([d['cnt'] for d in dico['cde'][0]])}'")
+                    return False
         return True
 
     def run(self, calm_mod: bool = False) -> list:

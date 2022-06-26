@@ -12,7 +12,7 @@ ___________________________________
  - Licence : GNU GPL v3
 '''
 
-version = "l-1.5"
+version = "l-1.6"
 
 class Lexer:
 
@@ -149,6 +149,11 @@ class Lexer:
 
         return out.replace("?;", "").split(";")
 
+    def remove_empty(self, e: list) -> list:
+        for l in e:
+            if len(l) == 1 and not (l[0]["iph"] + l[0]["oph"] + len(l[0]["cde"])):
+                e.remove(l)
+        return e
 
     def run(self) -> list:
         seg = self.sup_space(self.brut)
@@ -159,6 +164,8 @@ class Lexer:
             self.debug_print("run (lexing)", f"{e}", 1)
             tmp = self.split_push(e)
             out.append(tmp)
+
+        out = self.remove_empty(out)
 
         self.debug_print("run (out)", f"{out}", 1)
         return out
