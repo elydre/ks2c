@@ -8,6 +8,7 @@ $window.Width = 220
 $window.Height = 120
 $window.StartPosition = 'CenterScreen'
 $window.FormBorderStyle = 3 #fenêtre à taille fixe
+$window.BackColor = [System.Drawing.Color]::Gray
 
 # bouton
 $Button = New-Object System.Windows.Forms.Button
@@ -34,5 +35,6 @@ $Button.Add_Click(
     )
 # ajout du bouton à la fenêtre
 $window.Controls.Add($Button)
+
 # affichage de la fenêtre
 $window.ShowDialog()
