@@ -8,8 +8,6 @@ $window.Width = 220
 $window.Height = 120
 $window.StartPosition = 'CenterScreen'
 $window.FormBorderStyle = 3 #fenêtre à taille fixe
-$window.BackColor = [System.Drawing.Color]::Gray
-$window.ForeColor = [System.Drawing.Color]::White
 $window.Font = New-Object System.Drawing.Font('Arial', 12)
 $window.TopMost = $true
 
