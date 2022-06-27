@@ -5,7 +5,7 @@ git push
 
 git tag $version
 
-if ($? == 0) {
+if ($? -eq 0) {
     echo "le tag $version existe, suppression..."
     git tag -d $version
     git push --delete origin $version
