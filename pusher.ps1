@@ -30,7 +30,7 @@ $Button.Add_Click(
             git add -A
             git commit -m $version
             git push
-            $window.Text = $version
+            $window.Text = "v$version"
         }
     )
 # ajout du bouton à la fenêtre
