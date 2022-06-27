@@ -17,3 +17,4 @@
 | [0.2.5](https://github.com/elydre/ks2cpp/commit/4170e9f) | m-0.6   | l-1.5   | p-0.5 • | g-0.1   |  dev   |
 | [0.2.6](https://github.com/elydre/ks2cpp/commit/a139d72) | m-0.6   | l-1.5   | p-0.6 • | g-0.1   |  dev   |
 | [0.2.7](https://github.com/elydre/ks2cpp/commit/305df8a) | m-0.6   | l-1.6 • | p-0.7 • | g-0.1   |  dev   |
+| [0.2.8](https://github.com/elydre/ks2cpp/commit/305df8a) | m-0.6   | l-1.6   | p-0.8 • | g-0.1   |  dev   |

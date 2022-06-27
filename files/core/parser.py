@@ -42,8 +42,29 @@ class Parser:
             print(f"PSR - {level}| {fonc_name} : {text}")
 
 
-    def parse_line(self, line: list) -> list: ...
+    def parse_line(self, line: list) -> list:
+        # TODO: variables
+        # TODO: operators to functions
 
+        stack = []
+        out = []
+        tmp = {}
+
+        for e in line:
+            stack.insert(0, e)
+        
+        while len(stack) > 0:
+            e = stack.pop()["cde"][0][0]
+            tmp = {
+                "type": e["type"],
+                "cnt": e["cnt"],
+                "arg": [tmp] if tmp else None
+            }
+            if tmp["arg"] is None:
+                del tmp["arg"]
+
+        out.append(tmp)
+        return out
 
 
     def check(self) -> bool:
@@ -64,6 +85,8 @@ class Parser:
         out = []
         if not (self.check() or calm_mod):
             return out
+        self.debug_print("run", "ckeck passed!", 1)
         for line in self.inp:
             out.extend(self.parse_line(line))
+        self.debug_print("run", out, 1)
         return out
