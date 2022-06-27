@@ -45,7 +45,7 @@ class Parser:
     def parse_line(self, line: list) -> dict: ...
 
 
-    def check(self) -> None:
+    def check(self) -> bool:
         for line in self.inp:
             old = 0
             for i in range(len(line)):
