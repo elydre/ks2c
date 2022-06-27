@@ -33,6 +33,7 @@ $Button.Add_Click(
             $window.Text = "v$version"
         }
     )
+
 # ajout du bouton à la fenêtre
 $window.Controls.Add($Button)
 
