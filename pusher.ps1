@@ -8,6 +8,7 @@ if ($(git fetch --all --tags) -like "*$version*") {
     git tag -d $version
     git push --delete origin $version
 }
+
 git tag $version
 git push --tags
 
