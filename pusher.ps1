@@ -7,18 +7,22 @@ $window.Text = "GUI"
 $window.Width = 220
 $window.Height = 120
 $window.StartPosition = 'CenterScreen'
+$window.FormBorderStyle = 3 #fenêtre à taille fixe
 
+# bouton
+$Button = New-Object System.Windows.Forms.Button
+$Button.Text = 'commit version'
 
-$sayHelloButton = New-Object System.Windows.Forms.Button
-$sayHelloButton.Text = 'commit version'
 # dimensions du bouton
-$sayHelloButton.Width = 100
-$sayHelloButton.Height = 30
+$Button.Width = 100
+$Button.Height = 30
+
 # position du bouton
-$sayHelloButton.Left = 50
-$sayHelloButton.Top = 25
+$Button.Left = 50
+$Button.Top = 25
+
 # action du bouton
-$sayHelloButton.Add_Click(
+$Button.Add_Click(
         {    
             $version = (((cat .\version_history.md)[-1] -split "\| \[")[1] -split "\]")[0]
             echo "version: $version"
@@ -29,6 +33,6 @@ $sayHelloButton.Add_Click(
         }
     )
 # ajout du bouton à la fenêtre
-$window.Controls.Add($sayHelloButton)
+$window.Controls.Add($Button)
 # affichage de la fenêtre
 $window.ShowDialog()
