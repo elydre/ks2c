@@ -11,6 +11,7 @@ if ($? -eq 0) {
     git push --delete origin $version
 }
 
+git tag $version
 git push --tags
 
 echo "Version $version deployed"
