@@ -3,13 +3,12 @@ git add -A
 git commit -m $version -m "statut: $((((cat .\version_history.md)[-1] -split " \| ")[-1] -split " ")[1])"
 git push
 
-if ($(git fetch --all --tags) -like "*$version*") {
+if ($(git tag $version) -like "*fatal*") {
     echo "le tag $version existe, suppression..."
     git tag -d $version
     git push --delete origin $version
 }
 
-git tag $version
 git push --tags
 
 echo "Version $version deployed"
