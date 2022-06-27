@@ -15,7 +15,7 @@ ___________________________________
 from operator import xor
 
 
-version = "p-0.8"
+version = "p-1.1"
 
 class Parser:
     def __init__(self, inp: list, debug_lvl: int = 0) -> None:
@@ -41,30 +41,50 @@ class Parser:
         if self.debug_lvl >= level:
             print(f"PSR - {level}| {fonc_name} : {text}")
 
+    def parse_element(self, elm: list) -> dict:
+        # TODO: operators to functions
+        return elm[0]
+
+    def parse_merge(self, old: list, out: list) -> list:
+        # TODO: debug
+        if len(out) == 1:
+            out[0]["arg"] = old
+            return out
+        if len(out) == len(old):
+            for i in range(len(out)):
+                out[i]["arg"] = old[i]
+            return out
+        if not old:
+            return out
+        print("ERROR: merge")
+        
 
     def parse_line(self, line: list) -> list:
-        # TODO: multiple arguments
-        # TODO: operators to functions
+        # sourcery skip: inline-immediately-returned-variable, merge-list-append, move-assign-in-block
+
         # TODO: variables
 
-        stack = []
         out = []
-        tmp = {}
+        old = []
 
-        for e in line:
-            stack.insert(0, e)
+        print(line)
+
+        for dico in line:
+            for elm in dico["cde"]:
+                out.append(self.parse_element(elm))
         
-        while len(stack) > 0:
-            e = stack.pop()["cde"][0][0]
-            tmp = {
-                "type": e["type"],
-                "cnt": e["cnt"],
-                "arg": [tmp] if tmp else None
-            }
-            if tmp["arg"] is None:
-                del tmp["arg"]
 
-        out.append(tmp)
+            print("besoin de merge:", old)
+            print("avec:", out)
+            print()
+
+            out = self.parse_merge(old, out)
+
+            print("apres merge:", out)
+            print("\n")
+
+            old, out = out, []
+
         return out
 
 

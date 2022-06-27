@@ -1,1 +1,1 @@
-42 > print
+8, 4 >> fonc1, fonc2 >> fonc3
