@@ -1,1 +1,1 @@
-8, 4 >> fonc1, fonc2 >> fonc3
+3 + 9 / 3 > print

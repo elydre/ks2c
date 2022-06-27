@@ -15,7 +15,7 @@ ___________________________________
 from operator import xor
 
 
-version = "p-1.1"
+version = "p-1.2"
 
 class Parser:
     def __init__(self, inp: list, debug_lvl: int = 0) -> None:
@@ -24,29 +24,65 @@ class Parser:
 
         self.CONVERT_TABLE = {
             "**": "pow",
-            "*": "mul",
-            "/": "div",
-            "+": "add",
-            "-": "sub",
-            "==": "eq",
+            "*":  "mul",
+            "/":  "div",
+            "+":  "add",
+            "-":  "sub",
+            "==": "eql",
             "!=": "neq",
             "+=": "sup",
             "-=": "inf",
-            "!": "not",
+            "!":  "not",
         }
 
-        self.PRIORITY = ["**", "*", "/", "+", "-", "==", "!=", "+=", "-=", "!"]
+        self.PRIORITY = {
+            "**": 5,
+            "*":  4,
+            "/":  4,
+            "+":  3,
+            "-":  3,
+            "==": 2,
+            "!=": 2,
+            "+=": 2,
+            "-=": 2,
+            "!":  1,
+        }
     
     def debug_print(self, fonc_name: str, text: str, level: int) -> None:
         if self.debug_lvl >= level:
             print(f"PSR - {level}| {fonc_name} : {text}")
 
-    def parse_element(self, elm: list) -> dict:
-        # TODO: operators to functions
-        return elm[0]
+
+    def get_index_best_priority(self, inp):
+        get_priority = lambda x: self.PRIORITY[x]
+        best_priority = 0
+        best_index = 0
+        for i in range(len(inp)):
+            if inp[i]["type"] == "op" and get_priority(inp[i]["cnt"]) > best_priority:
+                best_priority = get_priority(inp[i]["cnt"])
+                best_index = i
+        return best_index
+
+    def ast_parse(self, inp: list) -> dict:
+        if len(inp) == 1:
+            return inp[0]
+    
+        best_index = self.get_index_best_priority(inp)
+        out = {
+            "type": "func",
+            "cnt": self.CONVERT_TABLE[inp[best_index]["cnt"]],
+            "args": [
+                self.ast_parse(inp[:best_index]),
+                self.ast_parse(inp[best_index + 1:])
+            ]
+        }
+        self.debug_print("ast_parse", out, 2)
+        return out
 
     def parse_merge(self, old: list, out: list) -> list:
         # TODO: debug
+        if not old:
+            return out
         if len(out) == 1:
             out[0]["arg"] = old
             return out
@@ -54,15 +90,11 @@ class Parser:
             for i in range(len(out)):
                 out[i]["arg"] = old[i]
             return out
-        if not old:
-            return out
         print("ERROR: merge")
         
 
     def parse_line(self, line: list) -> list:
-        # sourcery skip: inline-immediately-returned-variable, merge-list-append, move-assign-in-block
-
-        # TODO: variables
+        # TODO: variables, keywords
 
         out = []
         old = []
@@ -71,8 +103,7 @@ class Parser:
 
         for dico in line:
             for elm in dico["cde"]:
-                out.append(self.parse_element(elm))
-        
+                out.append(self.ast_parse(elm))
 
             print("besoin de merge:", old)
             print("avec:", out)
