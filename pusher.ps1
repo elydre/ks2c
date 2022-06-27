@@ -3,22 +3,21 @@ Add-Type -AssemblyName System.Drawing
 
 #fenêtre
 $window = New-Object System.Windows.Forms.Form
-$window.Text = 'Bonjour'
-$window.AutoSize = $true        #wrap to content
-$window.Height = 1              #Autosize agrandira la fenêtre
-$window.FormBorderStyle = 3     #fenêtre à taille fixe
+$window.Text = "git commit"
+$window.Width = 220
+$window.Height = 120
 $window.StartPosition = 'CenterScreen'
 
-#mise en page des boutons
-$btnLayout = New-Object System.Windows.Forms.FlowLayoutPanel
-$btnLayout.AutoSize = $true
-$btnLayout.Anchor = 8 #Right
 
 $sayHelloButton = New-Object System.Windows.Forms.Button
-$sayHelloButton.Text = 'Dire bonjour'
-$btnLayout.Controls.Add($sayHelloButton);
-
-#onclick
+$sayHelloButton.Text = 'commit version'
+# dimensions du bouton
+$sayHelloButton.Width = 100
+$sayHelloButton.Height = 30
+# position du bouton
+$sayHelloButton.Left = 50
+$sayHelloButton.Top = 25
+# action du bouton
 $sayHelloButton.Add_Click(
         {    
             $version = (((cat .\version_history.md)[-1] -split "\| \[")[1] -split "\]")[0]
@@ -28,9 +27,7 @@ $sayHelloButton.Add_Click(
             git push
         }
     )
-
-#ajoute les groupes
-$window.Controls.Add($btnLayout);
-
-#montre la fenêtre
+# ajout du bouton à la fenêtre
+$window.Controls.Add($sayHelloButton)
+# affichage de la fenêtre
 $window.ShowDialog()
