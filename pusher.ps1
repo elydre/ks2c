@@ -3,7 +3,7 @@ Add-Type -AssemblyName System.Drawing
 
 #fenêtre
 $window = New-Object System.Windows.Forms.Form
-$window.Text = "git commit"
+$window.Text = "GUI"
 $window.Width = 220
 $window.Height = 120
 $window.StartPosition = 'CenterScreen'
@@ -25,6 +25,7 @@ $sayHelloButton.Add_Click(
             git add -A
             git commit -m "$version"
             git push
+            echo "version $version committed"
         }
     )
 # ajout du bouton à la fenêtre
