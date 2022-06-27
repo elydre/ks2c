@@ -43,8 +43,9 @@ class Parser:
 
 
     def parse_line(self, line: list) -> list:
-        # TODO: variables
+        # TODO: multiple arguments
         # TODO: operators to functions
+        # TODO: variables
 
         stack = []
         out = []
