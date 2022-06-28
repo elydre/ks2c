@@ -1,1 +1,1 @@
-3 + 9 / 3 > print
+42, 45 >> $a, add >> sum > print
