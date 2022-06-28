@@ -74,7 +74,7 @@ class Parser:
         out = {
             "type": "func",
             "cnt": self.CONVERT_TABLE[inp[best_index]["cnt"]],
-            "args": [
+            "arg": [
                 self.ast_parse(inp[:best_index]),
                 self.ast_parse(inp[best_index + 1:])
             ]
