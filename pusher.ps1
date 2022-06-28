@@ -9,9 +9,9 @@ if ($? -eq 0) {
     echo "le tag $version existe, suppression..."
     git tag -d $version
     git push --delete origin $version
+    git tag $version
 }
 
-git tag $version
 git push --tags
 
 echo "Version $version deployed"
