@@ -115,7 +115,7 @@ class Parser:
 
             for i in range(len(out)):
                 if out[i]["type"] == "var":
-                    print("var:", out[i])
+                    self.debug_print("parse_line", f"var: {out[i]}", 3)
                     sortie.append(eval(str(out[i])))
                     if "arg" in out[i].keys():
                         del out[i]["arg"]
