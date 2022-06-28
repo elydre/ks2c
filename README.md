@@ -20,7 +20,7 @@ However the KEA remains slow, so instead of compiling the KS to KEA why not do i
 KS => ks2cpp => C++ => g++ => out-file
 ```
 
-*What makes me laugh is that the program is only 200 lines long but each line is the (musty) fruit of a long reflection*
+*I find it funny that behind the 300 of ks2cpp hides the (musty) fruit of a long reflection*
 
 ## compilation of cpp output
 
