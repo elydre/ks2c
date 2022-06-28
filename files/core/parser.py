@@ -118,7 +118,8 @@ class Parser:
                 if out[i]["type"] == "var":
                     print("var:", out[i])
                     sortie.append(eval(str(out[i])))
-                    del out[i]["arg"]
+                    if "arg" in out[i].keys():
+                        del out[i]["arg"]
 
             old, out = out, []
 

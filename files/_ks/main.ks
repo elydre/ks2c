@@ -1,1 +1,2 @@
-1 + 1 > print
+1 + 1 > $a > print
+$a, 42 >> and
