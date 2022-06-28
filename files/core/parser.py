@@ -25,7 +25,7 @@ class Parser:
         self.CONVERT_TABLE = {
             "**": "pow",
             "*":  "mul",
-            "/":  "div",
+            "/":  "edv",
             "+":  "add",
             "-":  "sub",
             "==": "eql",
