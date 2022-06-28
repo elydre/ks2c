@@ -1,4 +1,4 @@
-|                          release                         |  main   |  lexer  | parser  |generator|  ks.h   |status|
+|                          release                         |  main   |   LXR   |   PSR   |   GEN   |  ks.h   |status|
 |----------------------------------------------------------|---------|---------|---------|---------|---------|------|
 | [0.0.1](https://github.com/elydre/ks2cpp/commit/2915015) | m-0.1 • | l-0.1 • | p-0.1 • | g-0.1 • | k-0.0   | dev  |
 | [0.0.2](https://github.com/elydre/ks2cpp/commit/6eb424d) | m-0.2 • | l-0.1   | p-0.1   | g-0.1   | k-0.0   | dev  |
@@ -22,5 +22,6 @@
 | [0.3.0](https://github.com/elydre/ks2cpp/commit/54f1940) | m-0.6   | l-1.6   | p-1.2 • | g-0.1   | k-0.0   | dev  |
 | [0.3.1](https://github.com/elydre/ks2cpp/commit/6fdf44c) | m-0.6   | l-1.6   | p-1.3 • | g-0.1   | k-0.0   | dev  |
 | [0.3.2](https://github.com/elydre/ks2cpp/commit/d012765) | m-0.6   | l-1.6   | p-1.4 • | g-0.1   | k-0.0   | dev  |
-| [0.3.3](https://github.com/elydre/ks2cpp/commit/d012765) | m-0.6   | l-1.6   | p-1.4   | g-0.1   | k-0.1 • | dev  |
-| [0.4.0](https://github.com/elydre/ks2cpp/commit/d012765) | m-0.7 • | l-1.6   | p-1.4   | g-0.1   | k-0.1   | dev  |
+| [0.3.3](https://github.com/elydre/ks2cpp/commit/e53ca6e) | m-0.6   | l-1.6   | p-1.4   | g-0.1   | k-0.1 • | dev  |
+| [0.4.0](https://github.com/elydre/ks2cpp/commit/56e557b) | m-0.7 • | l-1.6   | p-1.4   | g-0.1   | k-0.1   | dev  |
+| [0.4.1](https://github.com/elydre/ks2cpp/commit/56e557b) | m-0.8 • | l-1.6   | p-1.5 • | g-0.2 • | k-0.1   | dev  |

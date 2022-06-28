@@ -13,23 +13,24 @@ ___________________________________
 '''
 
 
-from core.lexer import Lexer
-from core.parser import Parser
-from core.generator import Generator
+from core.lexer     import Lexer     as LXR
+from core.parser    import Parser    as PSR
+from core.generator import Generator as GEN
+
 import os
 
 """
 LEXER -token-> PARSER -ast-> GENERATOR -> cpp
 """
 
-version = "m-0.7"
+version = "m-0.8"
 
 path = os.path.dirname(os.path.abspath(__file__))
 
 with open(f"{path}/input.ks", "r") as f:
     file = f.read()
 
-print(file)
-lxr = Lexer(file, debug_lvl = 1)
-psr = Parser(lxr.run(), debug_lvl = 1)
-psr.run()
+lxr = LXR(file, debug_lvl = 1)
+psr = PSR(lxr.run(), debug_lvl = 1)
+gen = GEN(psr.run(), debug_lvl = 3)
+gen.run()

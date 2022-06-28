@@ -15,7 +15,7 @@ ___________________________________
 from operator import xor
 
 
-version = "p-1.4"
+version = "p-1.5"
 
 class Parser:
     def __init__(self, inp: list, debug_lvl: int = 0) -> None:
@@ -86,16 +86,15 @@ class Parser:
         if not old:
             return out
 
-        if len(out) == 1:
-            out[0]["arg"] = old
-            return out
+        for i in range(len(old)):
+            r = len(old) // len(out)
+            j = i // r if r else 0
+            self.debug_print("parse_merge", f"{i} => {j}", 3)
+            if "arg" not in out[j]:
+                out[j]["arg"] = []
+            out[j]["arg"].append(old[i])
 
-        if len(out) == len(old):
-            for i in range(len(out)):
-                out[i]["arg"] = old[i]
-            return out
-
-        self.debug_print("parse_merge", f"erreur de merge : {len(out)} != {len(old)}", 1)
+        return out
 
     def parse_line(self, line: list) -> list:
 

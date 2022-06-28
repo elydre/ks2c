@@ -161,7 +161,7 @@ class Lexer:
         out = []
         
         for e in seg:
-            self.debug_print("run (lexing)", f"{e}", 1)
+            self.debug_print("run (lexing)", f"{e}", 2)
             tmp = self.split_push(e)
             out.append(tmp)
 
