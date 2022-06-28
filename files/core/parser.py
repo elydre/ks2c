@@ -15,7 +15,7 @@ ___________________________________
 from operator import xor
 
 
-version = "p-1.3"
+version = "p-1.4"
 
 class Parser:
     def __init__(self, inp: list, debug_lvl: int = 0) -> None:
@@ -36,24 +36,25 @@ class Parser:
         }
 
         self.PRIORITY = {
-            "**": 5,
-            "*":  4,
-            "/":  4,
+            "**": 1,
+            "*":  2,
+            "/":  2,
             "+":  3,
             "-":  3,
-            "==": 2,
-            "!=": 2,
-            "+=": 2,
-            "-=": 2,
-            "!":  1,
+            "==": 4,
+            "!=": 4,
+            "+=": 4,
+            "-=": 4,
+            "!":  5,
         }
-    
+
+
     def debug_print(self, fonc_name: str, text: str, level: int) -> None:
         if self.debug_lvl >= level:
             print(f"PSR - {level}| {fonc_name} : {text}")
 
 
-    def get_index_best_priority(self, inp):
+    def get_best_op(self, inp):
         get_priority = lambda x: self.PRIORITY[x]
         best_priority = 0
         best_index = 0
@@ -61,13 +62,15 @@ class Parser:
             if inp[i]["type"] == "op" and get_priority(inp[i]["cnt"]) > best_priority:
                 best_priority = get_priority(inp[i]["cnt"])
                 best_index = i
+    
+        self.debug_print("get_best_op", f"{inp} => {best_index}", 3)
         return best_index
 
     def ast_parse(self, inp: list) -> dict:
         if len(inp) == 1:
             return inp[0]
     
-        best_index = self.get_index_best_priority(inp)
+        best_index = self.get_best_op(inp)
         out = {
             "type": "func",
             "cnt": self.CONVERT_TABLE[inp[best_index]["cnt"]],
@@ -80,38 +83,36 @@ class Parser:
         return out
 
     def parse_merge(self, old: list, out: list) -> list:
-        # TODO: debug
         if not old:
             return out
+
         if len(out) == 1:
             out[0]["arg"] = old
             return out
+
         if len(out) == len(old):
             for i in range(len(out)):
                 out[i]["arg"] = old[i]
             return out
-        print("ERROR: merge")
-        
+
+        self.debug_print("parse_merge", f"erreur de merge : {len(out)} != {len(old)}", 1)
 
     def parse_line(self, line: list) -> list:
-        # TODO: keywords
 
         out, sortie, old = [], [], []
 
-        print(line)
-
+        self.debug_print("parse_line", line, 2)
+        
         for dico in line:
             for elm in dico["cde"]:
                 out.append(self.ast_parse(elm))
 
-            print("besoin de merge:", old)
-            print("avec:", out)
-            print()
+            self.debug_print("parse_line", f"merge de: {old}", 3)
+            self.debug_print("parse_line", f"avec: {out}", 3)
 
             out = self.parse_merge(old, out)
 
-            print("apres merge:", out)
-            print("\n")
+            self.debug_print("parse_line", f"fin du merge: {out}", 2)
 
             for i in range(len(out)):
                 if out[i]["type"] == "var":
@@ -147,11 +148,15 @@ class Parser:
         return True
 
     def run(self, calm_mod: bool = False) -> list:
+
         out = []
         if not (self.check() or calm_mod):
             return out
+    
         self.debug_print("run", "ckeck passed!", 1)
+
         for line in self.inp:
             out.extend(self.parse_line(line))
+
         self.debug_print("run", out, 1)
         return out

@@ -1,1 +1,1 @@
-42, 45 >> $a, add >> sum > print
+1 + 1 > print
