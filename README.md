@@ -20,21 +20,41 @@ However the KEA remains slow, so instead of compiling the KS to KEA why not do i
 KS => ks2cpp => C++ => g++ => out-file
 ```
 
+## compilation of cpp output
+
+create a output directory named `build`
+
+```
+mkdir build
+cd build
+```
+
+compile the cpp code
+
+```
+cmake .. && make
+```
+
+execute the compiled code
+
+```
+./o_src/o_src
+```
+
 ## tree
 
 ```
-ks2cpp
+┌────────────────────────────
 │   .gitignore
 │   LICENSE
+│   pusher.ps1
 │   README.md
 │   sonar-project.properties
 │   version_history.md
 │
-├───.github
-│   └───workflows
-│           build.yml
-│
 └───files
+    │   CMakeLists.txt
+    │   input.ks
     │   main.py
     │
     ├───core
@@ -42,119 +62,9 @@ ks2cpp
     │       lexer.py
     │       parser.py
     │
-    ├───mod
-    │       cytron.py
-    │       tools.py
-    │
-    └───_ks
-            main.ks
-```
-
-## steps
-
-input:
-    
-```
-40 + 2, 24 >> is_inv > print
-```
-
-lexer:
-
-```py
-[
-    [
-        {
-            'iph': 0,
-            'oph': 2,
-            'cde': [
-                [
-                    {
-                        'type': 'int',
-                        'cnt': '40',
-                    },
-                    {
-                        'type': 'op',
-                        'cnt': '+'
-                    },
-                    {'type': 'int',
-                    'cnt': '2'
-                    }
-                ],
-                [
-                    {
-                        'type': 'int',
-                        'cnt': '24'
-                    }
-                ]
-            ]
-        },
-        {
-            'iph': 2,
-            'oph': 1,
-            'cde': [
-                [
-                    {
-                        'type': 'func',
-                        'cnt': 'is_inv'
-                    }
-                ]
-            ]
-        },
-        {
-            'iph': 1,
-            'oph': 0,
-            'cde': [
-                [
-                    {
-                        'type': 'func',
-                        'cnt': 'print'
-                    }
-                ]
-            ]
-        }
-    ]
-]
-```
-
-parser:
-
-```py
-[
-    {
-        'type': 'func',
-        'cnt': 'print',
-        'arg': [
-            {
-                'type': 'func',
-                'cnt': 'is_inv',
-                'arg': [
-                    {
-                        'type': 'func',
-                        'cnt': 'add',
-                        'arg': [
-                            {
-                                'type': 'int',
-                                'cnt': '40',
-                            },
-                            {
-                                'type': 'int',
-                                'cnt': '2',
-                            }
-                        ]
-                    },
-                    {
-                        'type': 'int',
-                        'cnt': '24',
-                    }
-                ]
-            }
-        ]
-    }
-]
-```
-
-generator:
-
-```cpp
-print(is_inv(add(40, 2), 24))
+    └───o_src
+            CMakeLists.txt
+            fcm.cpp
+            ks.h
+            main.cpp
 ```

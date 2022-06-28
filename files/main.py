@@ -12,19 +12,22 @@ ___________________________________
  - Licence : GNU GPL v3
 '''
 
+
 from core.lexer import Lexer
 from core.parser import Parser
 from core.generator import Generator
-
-import mod.cytron as cytron
+import os
 
 """
 LEXER -token-> PARSER -ast-> GENERATOR -> cpp
 """
 
-version = "m-0.6"
+version = "m-0.7"
 
-file = cytron.rfil("./_ks", "main.ks")
+path = os.path.dirname(os.path.abspath(__file__))
+
+with open(f"{path}/input.ks", "r") as f:
+    file = f.read()
 
 print(file)
 lxr = Lexer(file, debug_lvl = 1)

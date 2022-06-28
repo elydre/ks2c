@@ -1,4 +1,4 @@
-files/_ks/build/
+files/build/
 __pycache__/
 *.out
 *.exe
