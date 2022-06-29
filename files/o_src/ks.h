@@ -6,19 +6,24 @@
 using namespace std;
 
 // fcm.cpp
-void print(int x);
-void printn(int x);
-void printn(string x);
-int input(string prompt);
+int f_cout(int x);
+int f_print(int x);
 
-bool rev(int x);
+int f_input(string prompt);
 
-int mul(int x, int y);
-int edv(int x, int y);
-int add(int x, int y);
-int sub(int x, int y);
-int eql(int x, int y);
-int neq(int x, int y);
-int sup(int x, int y);
-int inf(int x, int y);
-int mod(int x, int y);
+void f_cout(string x);
+void f_print(string x);
+
+bool f_rev(int x);
+bool f_eql(int x, int y);
+bool f_neq(int x, int y);
+bool f_sup(int x, int y);
+bool f_inf(int x, int y);
+bool f_and(int x, int y);
+bool f_or(int x, int y);
+
+int f_mul(int x, int y);
+int f_edv(int x, int y);
+int f_add(int x, int y);
+int f_sub(int x, int y);
+int f_mod(int x, int y);

@@ -1,60 +1,80 @@
 #include "ks.h"
 
-void print(int x) {
+// print and input
+
+int f_cout(int x) {
     cout << x;
+    return x;
 }
 
-void printn(int x) {
+int f_print(int x) {
     cout << x << endl;
+    return x;
 }
 
-void printn(string x) {
-    cout << x << endl;
-}
-
-int input(string prompt) {
+int f_input(string prompt) {
     int x;
     cout << prompt;
     cin >> x;
     return x;
 }
 
-bool rev(int x) {
+void f_cout(string x) {
+    cout << x;
+}
+
+void f_print(string x) {
+    cout << x << endl;
+}
+
+// boolean
+
+bool f_rev(int x) {
     return !x;
 }
 
-int mul(int x, int y) {
-    return x * y;
-}
-
-int edv(int x, int y) {
-    return x / y;
-}
-
-int add(int x, int y) {
-    return x + y;
-}
-
-int sub(int x, int y) {
-    return x - y;
-}
-
-int eql(int x, int y) {
+bool f_eql(int x, int y) {
     return x == y;
 }
 
-int neq(int x, int y) {
+bool f_neq(int x, int y) {
     return x != y;
 }
 
-int sup(int x, int y) {
+bool f_sup(int x, int y) {
     return x > y;
 }
 
-int inf(int x, int y) {
+bool f_inf(int x, int y) {
     return x < y;
 }
 
-int mod(int x, int y) {
+bool f_and(int x, int y) {
+    return x && y;
+}
+
+bool f_or(int x, int y) {
+    return x || y;
+}
+
+// calculation
+
+int f_mul(int x, int y) {
+    return x * y;
+}
+
+int f_edv(int x, int y) {
+    return x / y;
+}
+
+int f_add(int x, int y) {
+    return x + y;
+}
+
+int f_sub(int x, int y) {
+    return x - y;
+}
+
+int f_mod(int x, int y) {
     return x % y;
 }

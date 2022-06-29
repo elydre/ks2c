@@ -12,7 +12,7 @@ ___________________________________
  - Licence : GNU GPL v3
 '''
 
-version = "g-0.6"
+version = "g-0.7"
 
 file_empty = """
 #include "ks.h"
@@ -35,7 +35,7 @@ class Generator:
 
 
     def cpplist2file(self, func: list, code: list) -> str:
-        return file_empty.replace("<code>", f"\n{' '*4}".join(code)).replace("<func>", "\n".join(func))[1:]
+        return file_empty.replace("<code>", f"\n{' '*4}".join(code)).replace("<func>", "\n".join(func)).replace("\n\n\n","\n\n")[1:]
 
 
     def convert_to_cpp(self, ast: dict, first: bool = False) -> str:
@@ -61,7 +61,7 @@ class Generator:
             out += f"{ast['cnt'][1:]} = {self.convert_to_cpp(ast['arg'][0])}{';' if first else ''}"
 
         elif ast["type"] == "func":
-            out += f"{ast['cnt']}({', '.join(self.convert_to_cpp(e) for e in ast['arg']) if 'arg' in ast else ''}){';' if first else ''}"
+            out += f"f_{ast['cnt']}({', '.join(self.convert_to_cpp(e) for e in ast['arg']) if 'arg' in ast else ''}){';' if first else ''}"
 
         elif ast["type"] == "int":
             out += f"{ast['cnt']}{';' if first else ''}"
@@ -82,14 +82,14 @@ class Generator:
             self.tab += 1
 
         elif ast["type"] == "keyword" and ast["cnt"] == "LOOP":
-            out += f"for (int i = 0; i < {self.convert_to_cpp(ast['arg'][0])}; i++)" + " {"
+            out += f"for (int _i = 0; _i < {self.convert_to_cpp(ast['arg'][0])}; _i++)" + " {"
             self.tab += 1
 
         elif ast["type"] == "keyword" and ast["cnt"] == "BREAK":
             out += "break;"
 
         elif ast["type"] == "keyword" and ast["cnt"] == "FUNC":
-            out += f"int {ast['arg'][0]['cnt'][1:-1]}({', '.join(f'int {self.convert_to_cpp(e)}' for e in ast['arg'][1:]) if 'arg' in ast else ''})" + " {"
+            out += f"int f_{ast['arg'][0]['cnt'][1:-1]}({', '.join(f'int {self.convert_to_cpp(e)}' for e in ast['arg'][1:]) if 'arg' in ast else ''})" + " {"
             self.tab += 1
             self.in_func = True
 

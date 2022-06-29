@@ -1,11 +1,7 @@
 #include "ks.h"
 
-int pairz(int number) {
-    return eql(mod(number, 2), 0);
-}
 
 int main() {
-    while (1) {
-        printn(pairz(input("number: ")));
-    }
+    int a = f_or(1, 0);
+    f_print(f_add(a, 1));
 }

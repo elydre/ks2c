@@ -1,7 +1,2 @@
-"pairz", $number >> FUNC
-    $number % 2 == 0 > RETURN
-    END
-
-1 > WHILE
-    "number: " > input > pairz > printn
-    END
+1, 0 >> or > $a
+$a + 1 > print
