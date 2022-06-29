@@ -28,3 +28,4 @@
 | [0.4.2](https://github.com/elydre/ks2cpp/commit/3dc1973) | m-0.9 • | l-1.6   | p-1.5   | g-0.3 • | k-0.1   | dev  |
 | [0.4.3](https://github.com/elydre/ks2cpp/commit/470adf8) | m-0.9   | l-1.6   | p-1.5   | g-0.4 • | k-0.2 • | dev  |
 | [0.4.4](https://github.com/elydre/ks2cpp/commit/40ccb03) | m-0.9   | l-1.6   | p-1.6 • | g-0.5 • | k-0.2   | pre  |
+| [0.4.5](https://github.com/elydre/ks2cpp/commit/xxxxxxx) | m-0.9   | l-1.6   | p-1.6   | g-0.6 • | k-0.3 • | pre  |

@@ -9,6 +9,7 @@ using namespace std;
 void print(int x);
 void printn(int x);
 void printn(string x);
+int input(string prompt);
 
 bool rev(int x);
 

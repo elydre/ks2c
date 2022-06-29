@@ -12,6 +12,13 @@ void printn(string x) {
     cout << x << endl;
 }
 
+int input(string prompt) {
+    int x;
+    cout << prompt;
+    cin >> x;
+    return x;
+}
+
 bool rev(int x) {
     return !x;
 }

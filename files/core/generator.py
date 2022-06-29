@@ -12,10 +12,12 @@ ___________________________________
  - Licence : GNU GPL v3
 '''
 
-version = "g-0.5"
+version = "g-0.6"
 
 file_empty = """
 #include "ks.h"
+
+<func>
 
 int main() {
     <code>
@@ -31,13 +33,18 @@ class Generator:
         if self.debug_lvl >= level:
             print(f"GEN - {level}| {fonc_name} : {text}")
 
-    def cpplist2file(self, cpplist: list) -> str:
-        return file_empty.replace("<code>", f"\n{' '*4}".join(cpplist))[1:]
+
+    def cpplist2file(self, func: list, code: list) -> str:
+        return file_empty.replace("<code>", f"\n{' '*4}".join(code)).replace("<func>", "\n".join(func))[1:]
+
 
     def convert_to_cpp(self, ast: dict, first: bool = False) -> str:
         # sourcery skip: low-code-quality
 
         self.debug_print("convert_to_cpp", f"{ast}", 3)
+
+        if self.in_func and self.tab == 0:
+            self.in_func = False
 
         if ast["type"] == "keyword" and ast["cnt"] == "END": 
             self.tab -= 1
@@ -82,8 +89,9 @@ class Generator:
             out += "break;"
 
         elif ast["type"] == "keyword" and ast["cnt"] == "FUNC":
-            out += f"int {ast['arg'][0]['cnt'][1:-1]}({', '.join(self.convert_to_cpp(e) for e in ast['arg'][1:]) if 'arg' in ast else ''})" + " {"
+            out += f"int {ast['arg'][0]['cnt'][1:-1]}({', '.join(f'int {self.convert_to_cpp(e)}' for e in ast['arg'][1:]) if 'arg' in ast else ''})" + " {"
             self.tab += 1
+            self.in_func = True
 
         elif ast["type"] == "keyword" and ast["cnt"] == "RETURN":
             out += f"return {self.convert_to_cpp(ast['arg'][0])};"
@@ -92,8 +100,16 @@ class Generator:
         self.debug_print("convert_to_cpp", f"{out}", 3)
         return out
 
-
     def run(self) -> list:
         self.tab = 0
         self.var_list = []
-        return [f"{self.convert_to_cpp(dico, True)}" for dico in self.inp]
+        self.in_func = False
+        func, code = [], []
+        for dico in self.inp:
+            s = self.convert_to_cpp(dico, True)
+            if self.in_func:
+                func.append(s)
+            else:
+                code.append(s)
+
+        return func, code
