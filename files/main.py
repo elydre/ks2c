@@ -23,7 +23,7 @@ import os
 LEXER -token-> PARSER -ast-> GENERATOR -> cpp
 """
 
-version = "m-0.8"
+version = "m-0.9"
 
 path = os.path.dirname(os.path.abspath(__file__))
 
@@ -33,4 +33,5 @@ with open(f"{path}/input.ks", "r") as f:
 lxr = LXR(file, debug_lvl = 1)
 psr = PSR(lxr.run(), debug_lvl = 1)
 gen = GEN(psr.run(), debug_lvl = 3)
-gen.run()
+cpp = gen.cpplist2file(gen.run())
+print(cpp)

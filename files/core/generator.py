@@ -12,7 +12,15 @@ ___________________________________
  - Licence : GNU GPL v3
 '''
 
-version = "g-0.2"
+version = "g-0.3"
+
+file_empty = """
+#include "ks.h"
+
+int main() {
+    <code>
+}
+"""
 
 class Generator:
     def __init__(self, inp: list, debug_lvl: int = 0) -> None:
@@ -23,23 +31,47 @@ class Generator:
         if self.debug_lvl >= level:
             print(f"GEN - {level}| {fonc_name} : {text}")
 
-    def convert_to_cpp(self, ast: dict) -> str:
-        # print(ast)
+    def cpplist2file(self, cpplist: list) -> str:
+        return file_empty.replace("<code>", f"\n{' '*4}".join(cpplist))
+
+    def convert_to_cpp(self, ast: dict, first: bool = False) -> str:
+        # sourcery skip: low-code-quality
+
+        if ast["type"] == "keyword" and ast["cnt"] == "END": 
+            self.tab -= 1
+
+        out = " " * 4 * self.tab if first else ""
+
+        if ast["type"] == "keyword" and ast["cnt"] == "END":
+            out += "}"
+        
         if ast["type"] == "var" and "arg" in ast:
-            out = f"int {ast['cnt'][1:]} = {self.convert_to_cpp(ast['arg'][0])}"
+            out += f"int {ast['cnt'][1:]} = {self.convert_to_cpp(ast['arg'][0])}{';' if first else ''}"
 
         elif ast["type"] == "func":
-            out = f"{ast['cnt']}({', '.join(self.convert_to_cpp(e) for e in ast['arg'])})"
+            out += f"{ast['cnt']}({', '.join(self.convert_to_cpp(e) for e in ast['arg'])}){';' if first else ''}"
 
         elif ast["type"] == "int":
-            out = ast["cnt"]
+            out += f"{ast['cnt']}{';' if first else ''}"
+
+        elif ast["type"] == "string":
+            print("les strings sont pas encore totalement supportés")
+            out += f"{ast['cnt']}{';' if first else ''}"
 
         elif ast["type"] == "var":
-            out = ast["cnt"][1:]
+            out += f"{ast['cnt'][1:]}{';' if first else ''}"
+
+        elif ast["type"] == "keyword" and ast["cnt"] == "IF":
+            out += f"if ({self.convert_to_cpp(ast['arg'][0])})" + " {"
+            self.tab += 1
+
+        elif ast["type"] == "keyword" and ast["cnt"] == "LOOP":
+            out += f"for (int i = 0; i < {self.convert_to_cpp(ast['arg'][0])}; i++)" + " {"
+            self.tab += 1
 
         return out
 
 
-    def run(self) -> None:
-        out = [f"{self.convert_to_cpp(dico)};" for dico in self.inp]
-        print("\n".join(out))
+    def run(self) -> list:
+        self.tab = 0
+        return [f"{self.convert_to_cpp(dico, True)}" for dico in self.inp]

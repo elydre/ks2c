@@ -1,3 +1,3 @@
-45 > LOOP
-    1 > print
+1 + 1 == 1 + 1 > IF
+    "gg pour l ast" > print
     END
