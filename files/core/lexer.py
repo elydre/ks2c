@@ -23,7 +23,7 @@ class Lexer:
         self.brut = file
         self.debug_lvl = debug_lvl
         self.op = "+-*/=!"
-        self.keywords = ["LOOP", "IF", "END", "BREAK", "FUNC", "RETURN"]
+        self.keywords = ["LOOP", "IF", "END", "BREAK", "FUNC", "RETURN", "WHILE"]
 
 
     def debug_print(self, fonc_name: str, text: str, level: int) -> None:

@@ -12,7 +12,7 @@ ___________________________________
  - Licence : GNU GPL v3
 '''
 
-version = "g-0.3"
+version = "g-0.4"
 
 file_empty = """
 #include "ks.h"
@@ -32,7 +32,7 @@ class Generator:
             print(f"GEN - {level}| {fonc_name} : {text}")
 
     def cpplist2file(self, cpplist: list) -> str:
-        return file_empty.replace("<code>", f"\n{' '*4}".join(cpplist))
+        return file_empty.replace("<code>", f"\n{' '*4}".join(cpplist))[1:]
 
     def convert_to_cpp(self, ast: dict, first: bool = False) -> str:
         # sourcery skip: low-code-quality
@@ -44,9 +44,12 @@ class Generator:
 
         if ast["type"] == "keyword" and ast["cnt"] == "END":
             out += "}"
-        
+
         if ast["type"] == "var" and "arg" in ast:
-            out += f"int {ast['cnt'][1:]} = {self.convert_to_cpp(ast['arg'][0])}{';' if first else ''}"
+            if ast["cnt"][1:] not in self.var_list:
+                self.var_list.append(ast["cnt"][1:])
+                out += "int "
+            out += f"{ast['cnt'][1:]} = {self.convert_to_cpp(ast['arg'][0])}{';' if first else ''}"
 
         elif ast["type"] == "func":
             out += f"{ast['cnt']}({', '.join(self.convert_to_cpp(e) for e in ast['arg'])}){';' if first else ''}"
@@ -65,13 +68,21 @@ class Generator:
             out += f"if ({self.convert_to_cpp(ast['arg'][0])})" + " {"
             self.tab += 1
 
+        elif ast["type"] == "keyword" and ast["cnt"] == "WHILE":
+            out += f"while ({self.convert_to_cpp(ast['arg'][0])})" + " {"
+            self.tab += 1
+
         elif ast["type"] == "keyword" and ast["cnt"] == "LOOP":
             out += f"for (int i = 0; i < {self.convert_to_cpp(ast['arg'][0])}; i++)" + " {"
             self.tab += 1
+
+        elif ast["type"] == "keyword" and ast["cnt"] == "BREAK":
+            out += "break;"
 
         return out
 
 
     def run(self) -> list:
         self.tab = 0
+        self.var_list = []
         return [f"{self.convert_to_cpp(dico, True)}" for dico in self.inp]

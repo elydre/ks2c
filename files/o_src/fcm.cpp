@@ -1,7 +1,19 @@
 #include "ks.h"
 
 void print(int x) {
+    cout << x;
+}
+
+void printn(int x) {
     cout << x << endl;
+}
+
+void printn(string x) {
+    cout << x << endl;
+}
+
+bool rev(int x) {
+    return !x;
 }
 
 int mul(int x, int y) {
@@ -34,4 +46,8 @@ int sup(int x, int y) {
 
 int inf(int x, int y) {
     return x < y;
+}
+
+int mod(int x, int y) {
+    return x % y;
 }

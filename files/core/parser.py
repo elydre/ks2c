@@ -24,6 +24,7 @@ class Parser:
 
         self.CONVERT_TABLE = {
             "**": "pow",
+            "%":  "mod",
             "*":  "mul",
             "/":  "edv",
             "+":  "add",
@@ -32,11 +33,12 @@ class Parser:
             "!=": "neq",
             "+=": "sup",
             "-=": "inf",
-            "!":  "not",
+            "!":  "rev",
         }
 
         self.PRIORITY = {
             "**": 1,
+            "%":  2,
             "*":  2,
             "/":  2,
             "+":  3,
