@@ -17,7 +17,7 @@ KS => ks2kea => KEA => interpreter
 
 However the KEA remains slow, so instead of compiling the KS to KEA why not do it to C++
 ```
-KS => ks2cpp => C++ => g++ => out-file
+KS => ks2cpp => C++ => cmake => out-file
 ```
 
 *It's funny that behind the 300 of ks2cpp hides the (mouldy) fruit of a long reflection*
