@@ -11,14 +11,9 @@
 
     $max / 2 > LOOP
         $j + 2 > $j
-        $n, $j >> mod > not > IF
+        $n % $j > not > IF
             0 > $prime
             BREAK
             END
         END
-
-    $prime > IF
-        $n > printn
-        END
-
     END
