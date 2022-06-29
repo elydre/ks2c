@@ -1,2 +1,1 @@
-1, 0 >> or > $a
-$a + 1 > print
+"it is time to publish the 1.0.0 release!" > print

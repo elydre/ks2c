@@ -14,7 +14,7 @@ int f_input(string prompt);
 void f_cout(string x);
 void f_print(string x);
 
-bool f_rev(int x);
+bool f_not(int x);
 bool f_eql(int x, int y);
 bool f_neq(int x, int y);
 bool f_sup(int x, int y);

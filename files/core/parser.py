@@ -33,7 +33,7 @@ class Parser:
             "!=": "neq",
             "+=": "sup",
             "-=": "inf",
-            "!":  "rev",
+            "!":  "not",
         }
 
         self.PRIORITY = {

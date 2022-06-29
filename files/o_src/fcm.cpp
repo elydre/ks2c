@@ -29,7 +29,7 @@ void f_print(string x) {
 
 // boolean
 
-bool f_rev(int x) {
+bool f_not(int x) {
     return !x;
 }
 
