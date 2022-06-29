@@ -12,7 +12,7 @@ ___________________________________
  - Licence : GNU GPL v3
 '''
 
-version = "g-0.4"
+version = "g-0.5"
 
 file_empty = """
 #include "ks.h"
@@ -37,6 +37,8 @@ class Generator:
     def convert_to_cpp(self, ast: dict, first: bool = False) -> str:
         # sourcery skip: low-code-quality
 
+        self.debug_print("convert_to_cpp", f"{ast}", 3)
+
         if ast["type"] == "keyword" and ast["cnt"] == "END": 
             self.tab -= 1
 
@@ -52,13 +54,13 @@ class Generator:
             out += f"{ast['cnt'][1:]} = {self.convert_to_cpp(ast['arg'][0])}{';' if first else ''}"
 
         elif ast["type"] == "func":
-            out += f"{ast['cnt']}({', '.join(self.convert_to_cpp(e) for e in ast['arg'])}){';' if first else ''}"
+            out += f"{ast['cnt']}({', '.join(self.convert_to_cpp(e) for e in ast['arg']) if 'arg' in ast else ''}){';' if first else ''}"
 
         elif ast["type"] == "int":
             out += f"{ast['cnt']}{';' if first else ''}"
 
         elif ast["type"] == "string":
-            print("les strings sont pas encore totalement supportés")
+            self.debug_print("convert_to_cpp", "les strings sont pas encore totalement supportés", 1)
             out += f"{ast['cnt']}{';' if first else ''}"
 
         elif ast["type"] == "var":
@@ -79,6 +81,15 @@ class Generator:
         elif ast["type"] == "keyword" and ast["cnt"] == "BREAK":
             out += "break;"
 
+        elif ast["type"] == "keyword" and ast["cnt"] == "FUNC":
+            out += f"int {ast['arg'][0]['cnt'][1:-1]}({', '.join(self.convert_to_cpp(e) for e in ast['arg'][1:]) if 'arg' in ast else ''})" + " {"
+            self.tab += 1
+
+        elif ast["type"] == "keyword" and ast["cnt"] == "RETURN":
+            out += f"return {self.convert_to_cpp(ast['arg'][0])};"
+
+
+        self.debug_print("convert_to_cpp", f"{out}", 3)
         return out
 
 

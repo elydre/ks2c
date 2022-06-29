@@ -15,7 +15,7 @@ ___________________________________
 from operator import xor
 
 
-version = "p-1.5"
+version = "p-1.6"
 
 class Parser:
     def __init__(self, inp: list, debug_lvl: int = 0) -> None:
@@ -73,14 +73,16 @@ class Parser:
             return inp[0]
     
         best_index = self.get_best_op(inp)
+
         out = {
             "type": "func",
             "cnt": self.CONVERT_TABLE[inp[best_index]["cnt"]],
             "arg": [
                 self.ast_parse(inp[:best_index]),
                 self.ast_parse(inp[best_index + 1:])
-            ]
+            ] if len(inp) > 2 else [self.ast_parse([inp[not best_index]])]
         }
+        
         self.debug_print("ast_parse", out, 2)
         return out
 
@@ -91,7 +93,8 @@ class Parser:
         for i in range(len(old)):
             r = len(old) // len(out)
             j = i // r if r else 0
-            self.debug_print("parse_merge", f"{i} => {j}", 3)
+            j = j if j < len(out) else len(out) - 1
+            self.debug_print("parse_merge", f"{i}//{r} => {j}", 3)
             if "arg" not in out[j]:
                 out[j]["arg"] = []
             out[j]["arg"].append(old[i])
