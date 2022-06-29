@@ -1,1 +1,3 @@
-1 + 2 != 1 + 2 > print
+45 > LOOP
+    1 > print
+    END
