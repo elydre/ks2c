@@ -20,7 +20,7 @@ KS => ks2cpp => C++ => cmake => out-file
 
 *It's funny that behind the 300 of ks2cpp hides the (mouldy) fruit of a long reflection*
 
-## compilation of cpp output
+## Compilation of cpp output
 
 create a output directory named `build`
 
@@ -41,7 +41,7 @@ execute the compiled code
 ./o_src/o_src
 ```
 
-## tree
+## Tree
 
 ```
 ┌───────────────────────────
