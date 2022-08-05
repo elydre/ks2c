@@ -22,21 +22,18 @@ KS => ks2cpp => C++ => cmake => out-file
 
 ## Compilation of cpp output
 
-create a output directory named `build`
-
+Create a output directory named `build`
 ```
 mkdir build
 cd build
 ```
 
-compile the cpp code
-
+Compile the cpp code
 ```
 cmake .. && make
 ```
 
-execute the compiled code
-
+Execute the compiled code
 ```
 ./o_src/o_src
 ```
