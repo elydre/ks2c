@@ -1,1 +1,1 @@
-"hello", 3 + 5 >> print
+true > type > print

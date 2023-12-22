@@ -21,6 +21,7 @@ file_empty = """
 
 int main(void) {
     <code>
+    return 0;
 }
 """
 
@@ -44,13 +45,34 @@ class Generator:
         out = ""
 
         if ast["type"] == "func":
-            out += f"f_{ast['cnt']}({len(ast['arg'])}, {', '.join(self.convert_to_c(e) for e in ast['arg']) if 'arg' in ast else ''}){';' if first else ''}"
+            if first:
+                out += f"f_clean_obj(f_{ast['cnt']}({len(ast['arg'])}, {', '.join(self.convert_to_c(e) for e in ast['arg']) if 'arg' in ast else ''}));"
+            else:
+                out += f"f_{ast['cnt']}({len(ast['arg'])}, {', '.join(self.convert_to_c(e) for e in ast['arg']) if 'arg' in ast else ''})"
 
         elif ast["type"] == "int":
-            out += f"INTEGER_OBJ({ast['cnt']}){';' if first else ''}"
+            if first:
+                self.debug_print("convert_to_c", f"deleting unused object {ast['cnt']}", 3)
+            else:
+                out += f"INTEGER_OBJ({ast['cnt']})"
 
         elif ast["type"] == "string":
-            out += f"STRING_OBJ({ast['cnt']}){';' if first else ''}"
+            if first:
+                self.debug_print("convert_to_c", f"deleting unused object {ast['cnt']}", 3)
+            else:
+                out += f"STRING_OBJ({ast['cnt']})"
+        
+        elif ast["type"] == "float":
+            if first:
+                self.debug_print("convert_to_c", f"deleting unused object {ast['cnt']}", 3)
+            else:
+                out += f"FLOAT_OBJ({ast['cnt']})"
+        
+        elif ast["type"] == "bool":
+            if first:
+                self.debug_print("convert_to_c", f"deleting unused object {ast['cnt']}", 3)
+            else:
+                out += f"BOOLEAN_OBJ({1 if ast['cnt'] == 'true' else 0})"
 
         else:
             print(f"ERROR: unknown type '{ast['type']}'")

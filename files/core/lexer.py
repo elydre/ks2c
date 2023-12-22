@@ -65,14 +65,18 @@ class Lexer:
         out = []
         temp = ""
         in_string, in_op = False, False
-        for car in cde:
-            self.debug_print("cut_operators", f"{temp}.{car} in_string={in_string} in_op={in_op}", 3)
-            if car in ["\"", "'"]:
+        for char in cde:
+            self.debug_print("cut_operators", f"{temp}.{char} in_string={in_string} in_op={in_op}", 3)
+            if char in ["\"", "'"]:
                 in_string = not in_string
             if in_string:
-                temp += car
+                if in_op:
+                    in_op = False
+                    out.append(self.get_type(temp))
+                    temp = ""
+                temp += char
                 continue
-            if car in self.op:
+            if char in self.op:
                 if not in_op:
                     if temp: out.append(self.get_type(temp))
                     temp, in_op = "", True
@@ -80,7 +84,7 @@ class Lexer:
                 in_op = False
                 out.append(self.get_type(temp))
                 temp = ""
-            temp += car
+            temp += char
         if temp: out.append(self.get_type(temp))
         self.debug_print("cut_operators", f"{out}", 2)
         return out
