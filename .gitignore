@@ -1,4 +1,3 @@
-files/build/
+files/o_src/main.c
 __pycache__/
 *.out
-*.exe
