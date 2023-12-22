@@ -20,10 +20,10 @@ from core.generator import Generator as GEN
 import os
 
 """
-LEXER -token-> PARSER -ast-> GENERATOR -> C
+LEXER -token-> PARSER -ast-> GENERATOR -> cpp
 """
 
-version = "m-1.0"
+version = "m-0.9"
 
 path = os.path.dirname(os.path.abspath(__file__))
 
@@ -32,8 +32,8 @@ with open(f"{path}/input.ks", "r") as f:
 
 lxr = LXR(file, debug_lvl = 1)
 psr = PSR(lxr.run(), debug_lvl = 1)
-gen = GEN(psr.run(), debug_lvl = 3)
-c = gen.clist2file([], gen.run())
+gen = GEN(psr.run(), debug_lvl = 1)
+cpp = gen.cpplist2file(*gen.run())
 
-with open(f"{path}/o_src/main.c", "w") as f:
-    f.write(c)
+with open(f"{path}/o_src/main.cpp", "w") as f:
+    f.write(cpp)

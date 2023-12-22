@@ -1,4 +1,4 @@
 files/build/
 __pycache__/
 *.out
-*.o
+*.exe

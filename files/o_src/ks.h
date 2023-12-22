@@ -1,43 +1,29 @@
-#ifndef KS_H
-#define KS_H
+#pragma once
 
-#include <stddef.h>
+#include <iostream>
+#include <math.h>
 
-#define VERSION "k-2.0"
+using namespace std;
 
-#define STRING_OBJ(s) (obj_t){STRING, 0, s}
-#define INTEGER_OBJ(i) (obj_t){INTEGER, i, NULL}
-#define NONE_OBJ (obj_t){NONE, 0, NULL}
+// fcm.cpp
+int f_cout(int x);
+int f_print(int x);
 
-enum types {
-    INTEGER,
-    STRING,
-    BOOLEAN,
-    ALLOCATED_STRING,
-    NONE
-};
+int f_input(string prompt);
 
-typedef struct {
-    int type;
-    int int_val;
-    char *string_ptr;
-} obj_t;
+void f_cout(string x);
+void f_print(string x);
 
-// fcm.c
-obj_t f_print(int n, ...);
+bool f_not(int x);
+bool f_eql(int x, int y);
+bool f_neq(int x, int y);
+bool f_sup(int x, int y);
+bool f_inf(int x, int y);
+bool f_and(int x, int y);
+bool f_or(int x, int y);
 
-obj_t f_not(int n, obj_t a);
-obj_t f_eql(int n, obj_t a, obj_t b);
-obj_t f_neq(int n, obj_t a, obj_t b);
-obj_t f_sup(int n, obj_t a, obj_t b);
-obj_t f_inf(int n, obj_t a, obj_t b);
-obj_t f_and(int n, obj_t a, obj_t b);
-obj_t f_or(int n, obj_t a, obj_t b);
-
-obj_t f_mul(int n, obj_t a, obj_t b);
-obj_t f_edv(int n, obj_t a, obj_t b);
-obj_t f_add(int n, obj_t a, obj_t b);
-obj_t f_sub(int n, obj_t a, obj_t b);
-obj_t f_mod(int n, obj_t a, obj_t b);
-
-#endif
+int f_mul(int x, int y);
+int f_edv(int x, int y);
+int f_add(int x, int y);
+int f_sub(int x, int y);
+int f_mod(int x, int y);
