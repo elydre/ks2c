@@ -1,10 +1,9 @@
-# ks2cpp
+# ks2c
 
-[![Sonar Cube Static Analysis](https://sonarcloud.io/api/project_badges/measure?project=ks2cpp&metric=ncloc)](https://sonarcloud.io/dashboard?id=ks2cpp)
 [![Wiki](https://img.shields.io/badge/esolang-wiki-lightgray)](https://esolangs.org/wiki/kS)
-[![Github Project](https://img.shields.io/badge/project-open-lightgray)](https://github.com/elydre/ks2cpp/projects/2)
+[![Github Project](https://img.shields.io/badge/project-open-lightgray)](https://github.com/elydre/ks2c/projects/2)
 [![dif10](https://img.shields.io/badge/dif10-5.5-lightgray)](https://pf4.ddns.net/dif10/)
-[![version](https://img.shields.io/badge/version-last-lightgray)](https://github.com/elydre/ks2cpp/blob/main/version_history.md)
+[![version](https://img.shields.io/badge/version-last-lightgray)](https://github.com/elydre/ks2c/blob/main/version_history.md)
 
 ## About
 
@@ -13,55 +12,19 @@ The [KS (KEA-stream)](https://kea-corp.github.io/stream/) is an [esolang](https:
 KS => ks2kea => KEA => interpreter
 ```
 
-However the KEA remains slow, so instead of compiling the KS to KEA why not do it to C++
+However the KEA remains slow, so instead of compiling the KS to KEA why not do it to C
 ```
-KS => ks2cpp => C++ => cmake => out-file
-```
-
-*It's funny that behind the 300 of ks2cpp hides the (mouldy) fruit of a long reflection*
-
-## Compilation of cpp output
-
-Create a output directory named `build`
-```
-mkdir build
-cd build
+KS => ks2c => C => make => out-file
 ```
 
-Compile the cpp code
+## Compilation of C output
+
+Compile the C code
 ```
-cmake .. && make
+make
 ```
 
 Execute the compiled code
 ```
-./o_src/o_src
-```
-
-## Tree
-
-```
-┌───────────────────────────
-│   .gitignore
-│   LICENSE
-│   pusher.ps1
-│   README.md
-│   sonar-project.properties
-│   version_history.md
-│
-└───files
-    │   CMakeLists.txt
-    │   input.ks
-    │   main.py
-    │
-    ├───core
-    │       generator.py
-    │       lexer.py
-    │       parser.py
-    │
-    └───o_src
-            CMakeLists.txt
-            fcm.cpp
-            ks.h
-            main.cpp
+./prog
 ```
