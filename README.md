@@ -22,7 +22,7 @@ KS => ks2c => C => make => out-file
 cd files/
 
 # Compile the KS to C
-python3 ks2c.py
+python3 main.py
 
 # Compile the C to an executable
 make
