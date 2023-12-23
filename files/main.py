@@ -6,12 +6,10 @@
           |___/
 ___________________________________
 
- - codé en : UTF-8
  - langage : python3
  - GitHub  : github.com/elydre
- - Licence : GNU GPL v3
+ - License : GNU GPL v3
 '''
-
 
 from core.lexer     import Lexer     as LXR
 from core.parser    import Parser    as PSR

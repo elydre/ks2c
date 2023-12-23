@@ -6,10 +6,9 @@
           |___/
 ___________________________________
 
- - codé en : UTF-8
  - langage : python3
  - GitHub  : github.com/elydre
- - Licence : GNU GPL v3
+ - License : GNU GPL v3
 '''
 
 import core.tools as tools
