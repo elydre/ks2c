@@ -36,6 +36,7 @@ class Generator:
         self.debug_lvl = debug_lvl
         self.vars = {}
         self.generated = []
+        self.indent = 0
     
     def debug_print(self, fonc_name: str, text: str, level: int) -> None:
         if self.debug_lvl >= level:
@@ -56,7 +57,11 @@ class Generator:
 
     def convert_to_c(self, ast: dict, first: bool = False, func: str = "main") -> str:
         self.debug_print("convert_to_c", f"{ast}", 3)
-        out = ""
+
+        if first:
+            out = " " * self.indent * 4
+        else:
+            out = ""
 
         if ast["type"] == "func":
             if first:
@@ -81,7 +86,7 @@ class Generator:
                 self.debug_print("convert_to_c", f"deleting unused object {ast['cnt']}", 3)
             else:
                 out += f"FLOAT_OBJ({ast['cnt']})"
-        
+
         elif ast["type"] == "bool":
             if first:
                 self.debug_print("convert_to_c", f"deleting unused object {ast['cnt']}", 3)
@@ -101,9 +106,31 @@ class Generator:
             else:
                 out += f"fi_get_var({func_index}, {var_index})"
 
+        elif ast["type"] == "keyword":
+            if not first:
+                self.debug_print("convert_to_c", f"error: keyword '{ast['cnt']}' not at the beginning of a line", 0)
+            elif ast["cnt"] == "IF":
+                out += f"if (fi_is({self.convert_to_c(ast['arg'][0], func = func)}))" + " {"
+                self.indent += 1
+            elif ast["cnt"] == "ELSE":
+                out += f"else" + "{\n"
+                self.indent += 1
+            elif ast["cnt"] == "WHILE":
+                out += f"while (fi_is({self.convert_to_c(ast['arg'][0], func = func)}))" + " {"
+                self.indent += 1
+            elif ast["cnt"] == "END":
+                if not self.indent:
+                    self.debug_print("convert_to_c", f"error: nothing to end", 0)
+                else:
+                    self.indent -= 1
+                    out = out[:-4] + "}"
+            elif ast["cnt"] == "BREAK":
+                out += "break;\n"
+            else:
+                self.debug_print("convert_to_c", f"ERROR: unknown keyword '{ast['cnt']}'", 0)
+
         else:
             print(f"ERROR: unknown type '{ast['type']}'")
-
 
         self.debug_print("convert_to_c", f"{out}", 3)
         return out

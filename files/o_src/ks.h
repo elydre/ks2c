@@ -35,6 +35,7 @@ void  fi_clean_obj(obj_t obj);
 void  fi_clean_up(void);
 void  fi_create_var(int func_id, int var_id, obj_t o);
 obj_t fi_get_var(int func_id, int var_id);
+int fi_is(obj_t o);
 
 // fcm.c
 obj_t f_print(int n, ...);

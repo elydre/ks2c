@@ -65,3 +65,30 @@ obj_t fi_get_var(int func_id, int var_id) {
 
     return g_vars.vars[func_id].arr[var_id];
 }
+
+int fi_is(obj_t o) {
+    int ret = 0;
+    if (
+        o.type == ALLOCATED_STRING ||
+        o.type == STRING
+    ) {
+        if (o.str_ptr != NULL && o.str_ptr[0])
+            ret = 1;
+    } else if (
+        o.type == INTEGER ||
+        o.type == BOOLEAN
+    ) {
+        ret = o.int_val != 0;
+    }
+    else if (o.type == FLOAT) {
+        ret = o.flt_val != 0.0;
+    }
+    else if (o.type == NONE) {
+        ret = 0;
+    }
+    else {
+        printf("fi_is: unknown type [%d]\n", o.type);
+    }
+    fi_clean_obj(o);
+    return ret;
+}

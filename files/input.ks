@@ -1,2 +1,6 @@
-0, 1 >> $a, $b >> not, not >> $not_a, $not_b
-$a, $not_b, $b, $not_a >>>> and, and >> or > print
+10 > $i
+
+$i > WHILE
+    "i =", $i >> print
+    $i - 1 > $i
+END
