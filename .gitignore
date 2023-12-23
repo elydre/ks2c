@@ -1,4 +1,10 @@
+# input / output files
 files/o_src/main.c
+input.ks
+
+# python cache
 __pycache__/
+
+# compiled files
 *.out
 *.o
