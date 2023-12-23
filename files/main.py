@@ -33,7 +33,8 @@ with open(f"{path}/input.ks", "r") as f:
 lxr = LXR(file, debug_lvl = 1)
 psr = PSR(lxr.run(), debug_lvl = 1)
 gen = GEN(psr.run(), debug_lvl = 1)
-c = gen.clist2file([], gen.run())
+gen.run()
+c = gen.clist2file()
 
 with open(f"{path}/o_src/main.c", "w") as f:
     f.write(c)

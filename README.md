@@ -16,14 +16,17 @@ However the KEA remains slow, so instead of compiling the KS to KEA why not do i
 KS => ks2c => C => make => out-file
 ```
 
-## Compilation of C output
+## Build and run
 
-Compile the C code
-```
+```sh
+cd files/
+
+# Compile the KS to C
+python3 ks2c.py
+
+# Compile the C to an executable
 make
-```
 
-Execute the compiled code
-```
+# Execute the compiled code
 ./prog
 ```

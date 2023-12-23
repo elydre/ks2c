@@ -5,12 +5,6 @@
 
 #include "ks.h"
 
-void f_clean_obj(obj_t o) {
-    if (o.type == ALLOCATED_STRING) {
-        free(o.str_ptr);
-    }
-}
-
 obj_t f_print(int n, ...) {
     va_list ap;
     va_start(ap, n);
@@ -125,4 +119,52 @@ obj_t f_pass(int n, obj_t a) {
         return NONE_OBJ;
     }
     return a;
+}
+
+obj_t f_or(int n, obj_t a, obj_t b) {
+    if (n != 2) {
+        printf("error: or takes 2 arguments, got %d\n", n);
+        return NONE_OBJ;
+    }
+
+    if (
+        (a.type == BOOLEAN || a.type == INTEGER) &&
+        (b.type == BOOLEAN || b.type == INTEGER)
+    ) {
+        return BOOLEAN_OBJ(a.int_val || b.int_val);
+    } else {
+        printf("error: unsupported type for or [%d] [%d]\n", a.type, b.type);
+    }
+    return NONE_OBJ;
+}
+
+obj_t f_not(int n, obj_t a) {
+    if (n != 1) {
+        printf("error: not takes 1 argument, got %d\n", n);
+        return NONE_OBJ;
+    }
+
+    if (a.type == BOOLEAN || a.type == INTEGER) {
+        return BOOLEAN_OBJ(!a.int_val);
+    } else {
+        printf("error: unsupported type for not [%d]\n", a.type);
+    }
+    return NONE_OBJ;
+}
+
+obj_t f_and(int n, obj_t a, obj_t b) {
+    if (n != 2) {
+        printf("error: and takes 2 arguments, got %d\n", n);
+        return NONE_OBJ;
+    }
+
+    if (
+        (a.type == BOOLEAN || a.type == INTEGER) &&
+        (b.type == BOOLEAN || b.type == INTEGER)
+    ) {
+        return BOOLEAN_OBJ(a.int_val && b.int_val);
+    } else {
+        printf("error: unsupported type for and [%d] [%d]\n", a.type, b.type);
+    }
+    return NONE_OBJ;
 }

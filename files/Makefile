@@ -1,7 +1,8 @@
 .PHONY:	all clean fclean re
 
 SRCS	=	o_src/main.c \
-			o_src/fcm.c
+			o_src/fcm.c \
+			o_src/tools.c \
 
 OBJS	= $(SRCS:.c=.o)
 
