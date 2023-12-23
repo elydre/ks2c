@@ -5,6 +5,12 @@
 
 #include "ks.h"
 
+/*****************************************
+ *                                      *
+ *           Basic functions            *
+ *                                      *
+*****************************************/
+
 obj_t f_print(int n, ...) {
     va_list ap;
     va_start(ap, n);
@@ -30,6 +36,42 @@ obj_t f_print(int n, ...) {
     va_end(ap);
     return NONE_OBJ;
 }
+
+obj_t f_type(int n, obj_t a) {
+    if (n != 1) {
+        printf("error: type takes 1 argument, got %d\n", n);
+        return NONE_OBJ;
+    }
+
+    if (a.type == INTEGER) {
+        return STRING_OBJ("int");
+    } else if (a.type == STRING || a.type == ALLOCATED_STRING) {
+        return STRING_OBJ("str");
+    } else if (a.type == BOOLEAN) {
+        return STRING_OBJ("bool");
+    } else if (a.type == FLOAT) {
+        return STRING_OBJ("float");
+    } else if (a.type == NONE) {
+        return STRING_OBJ("none");
+    } else {
+        printf("error: unknown type [%d]\n", a.type);
+    }
+    return NONE_OBJ;
+}
+
+obj_t f_pass(int n, obj_t a) {
+    if (n != 1) {
+        printf("error: pass takes 1 argument, got %d\n", n);
+        return NONE_OBJ;
+    }
+    return a;
+}
+
+/*****************************************
+ *                                      *
+ *         Operations functions         *
+ *                                      *
+*****************************************/
 
 obj_t f_add(int n, obj_t a, obj_t b) {
     if (n != 2) {
@@ -107,6 +149,47 @@ obj_t f_mul(int n, obj_t a, obj_t b) {
     return NONE_OBJ;
 }
 
+obj_t f_mod(int n, obj_t a, obj_t b) {
+    if (n != 2) {
+        printf("error: mod takes 2 arguments, got %d\n", n);
+        return NONE_OBJ;
+    }
+
+    if (a.type == INTEGER && b.type == INTEGER) {
+        return INTEGER_OBJ(a.int_val % b.int_val);
+    } else {
+        printf("error: unsupported type for mod [%d] [%d]\n", a.type, b.type);
+    }
+    return NONE_OBJ;
+}
+
+obj_t f_edv(int n, obj_t a, obj_t b) {
+    if (n != 2) {
+        printf("error: edv takes 2 arguments, got %d\n", n);
+        return NONE_OBJ;
+    }
+
+    if (a.type == INTEGER && b.type == INTEGER) {
+        return INTEGER_OBJ(a.int_val / b.int_val);
+    } else if (a.type == FLOAT && b.type == FLOAT) {
+        return FLOAT_OBJ(a.flt_val / b.flt_val);
+    } else if (a.type == INTEGER && b.type == FLOAT) {
+        return FLOAT_OBJ(a.int_val / b.flt_val);
+    } else if (a.type == FLOAT && b.type == INTEGER) {
+        return FLOAT_OBJ(a.flt_val / b.int_val);
+    } else {
+        printf("error: unsupported type for edv [%d] [%d]\n", a.type, b.type);
+    }
+
+    return NONE_OBJ;
+}
+
+/*****************************************
+ *                                      *
+ *         Comparison functions         *
+ *                                      *
+*****************************************/
+
 obj_t f_eql(int n, obj_t a, obj_t b) {
     if (n != 2) {
         printf("error: eql takes 2 arguments, got %d\n", n);
@@ -135,6 +218,19 @@ obj_t f_eql(int n, obj_t a, obj_t b) {
         printf("error: unsupported type for eql [%d] [%d]\n", a.type, b.type);
     }
     return NONE_OBJ;
+}
+
+obj_t f_neq(int n, obj_t a, obj_t b) {
+    if (n != 2) {
+        printf("error: neq takes 2 arguments, got %d\n", n);
+        return NONE_OBJ;
+    }
+
+    obj_t res = f_eql(2, a, b);
+    if (res.type == BOOLEAN) {
+        res.int_val = !res.int_val;
+    }
+    return res;
 }
 
 obj_t f_inf(int n, obj_t a, obj_t b) {
@@ -169,48 +265,25 @@ obj_t f_sup(int n, obj_t a, obj_t b) {
     return NONE_OBJ;
 }
 
-obj_t f_mod(int n, obj_t a, obj_t b) {
-    if (n != 2) {
-        printf("error: mod takes 2 arguments, got %d\n", n);
+
+/*****************************************
+ *                                      *
+ *          Boolean functions           *
+ *                                      *
+*****************************************/
+
+obj_t f_not(int n, obj_t a) {
+    if (n != 1) {
+        printf("error: not takes 1 argument, got %d\n", n);
         return NONE_OBJ;
     }
 
-    if (a.type == INTEGER && b.type == INTEGER) {
-        return INTEGER_OBJ(a.int_val % b.int_val);
+    if (a.type == BOOLEAN || a.type == INTEGER) {
+        return BOOLEAN_OBJ(!a.int_val);
     } else {
-        printf("error: unsupported type for mod [%d] [%d]\n", a.type, b.type);
+        printf("error: unsupported type for not [%d]\n", a.type);
     }
     return NONE_OBJ;
-}
-
-obj_t f_type(int n, obj_t a) {
-    if (n != 1) {
-        printf("error: type takes 1 argument, got %d\n", n);
-        return NONE_OBJ;
-    }
-
-    if (a.type == INTEGER) {
-        return STRING_OBJ("int");
-    } else if (a.type == STRING || a.type == ALLOCATED_STRING) {
-        return STRING_OBJ("str");
-    } else if (a.type == BOOLEAN) {
-        return STRING_OBJ("bool");
-    } else if (a.type == FLOAT) {
-        return STRING_OBJ("float");
-    } else if (a.type == NONE) {
-        return STRING_OBJ("none");
-    } else {
-        printf("error: unknown type [%d]\n", a.type);
-    }
-    return NONE_OBJ;
-}
-
-obj_t f_pass(int n, obj_t a) {
-    if (n != 1) {
-        printf("error: pass takes 1 argument, got %d\n", n);
-        return NONE_OBJ;
-    }
-    return a;
 }
 
 obj_t f_or(int n, obj_t a, obj_t b) {
@@ -230,19 +303,6 @@ obj_t f_or(int n, obj_t a, obj_t b) {
     return NONE_OBJ;
 }
 
-obj_t f_not(int n, obj_t a) {
-    if (n != 1) {
-        printf("error: not takes 1 argument, got %d\n", n);
-        return NONE_OBJ;
-    }
-
-    if (a.type == BOOLEAN || a.type == INTEGER) {
-        return BOOLEAN_OBJ(!a.int_val);
-    } else {
-        printf("error: unsupported type for not [%d]\n", a.type);
-    }
-    return NONE_OBJ;
-}
 
 obj_t f_and(int n, obj_t a, obj_t b) {
     if (n != 2) {

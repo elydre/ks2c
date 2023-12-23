@@ -3,7 +3,7 @@
 
 #include <stddef.h>
 
-#define VERSION "k-2.1"
+#define VERSION "k-2.2"
 
 #define STRING_OBJ(s) (obj_t){.type = STRING, .str_ptr = s}
 #define ALLOCATED_STRING_OBJ(p) (obj_t){.type = ALLOCATED_STRING, .str_ptr = p}
@@ -45,18 +45,19 @@ obj_t f_print(int n, ...);
 obj_t f_type(int n, obj_t a);
 obj_t f_pass(int n, obj_t a);
 
-obj_t f_not(int n, obj_t a);
+obj_t f_sub(int n, obj_t a, obj_t b);
+obj_t f_add(int n, obj_t a, obj_t b);
+obj_t f_mul(int n, obj_t a, obj_t b);
+obj_t f_mod(int n, obj_t a, obj_t b);
+obj_t f_edv(int n, obj_t a, obj_t b);
+
 obj_t f_eql(int n, obj_t a, obj_t b);
 obj_t f_neq(int n, obj_t a, obj_t b);
-obj_t f_sup(int n, obj_t a, obj_t b);
 obj_t f_inf(int n, obj_t a, obj_t b);
-obj_t f_and(int n, obj_t a, obj_t b);
-obj_t f_or(int n, obj_t a, obj_t b);
+obj_t f_sup(int n, obj_t a, obj_t b);
 
-obj_t f_mul(int n, obj_t a, obj_t b);
-obj_t f_edv(int n, obj_t a, obj_t b);
-obj_t f_add(int n, obj_t a, obj_t b);
-obj_t f_sub(int n, obj_t a, obj_t b);
-obj_t f_mod(int n, obj_t a, obj_t b);
+obj_t f_not(int n, obj_t a);
+obj_t f_or(int n, obj_t a, obj_t b);
+obj_t f_and(int n, obj_t a, obj_t b);
 
 #endif
