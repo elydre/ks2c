@@ -3,7 +3,7 @@
 
 #include <stddef.h>
 
-#define VERSION "k-2.0"
+#define VERSION "k-2.1"
 
 #define STRING_OBJ(s) (obj_t){.type = STRING, .str_ptr = s}
 #define ALLOCATED_STRING_OBJ(p) (obj_t){.type = ALLOCATED_STRING, .str_ptr = p}

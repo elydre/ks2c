@@ -12,7 +12,7 @@ ___________________________________
  - Licence : GNU GPL v3
 '''
 
-version = "g-1.0"
+version = "g-1.1"
 
 file_empty = """
 #include "ks.h"
@@ -65,9 +65,9 @@ class Generator:
 
         if ast["type"] == "func":
             if first:
-                out += f"fi_clean_obj(f_{ast['cnt']}({len(ast['arg'])}, {', '.join(self.convert_to_c(e, func = func) for e in ast['arg']) if 'arg' in ast else ''}));"
+                out += f"fi_clean_obj(f_{ast['cnt']}({len(ast['arg'])}, {', '.join(self.convert_to_c(e, func = func) for e in ast['arg']) if 'arg' in ast else ''}));" if 'arg' in ast else f"fi_clean_obj(f_{ast['cnt']}(0));"
             else:
-                out += f"f_{ast['cnt']}({len(ast['arg'])}, {', '.join(self.convert_to_c(e, func = func) for e in ast['arg']) if 'arg' in ast else ''})"
+                out += f"f_{ast['cnt']}({len(ast['arg'])}, {', '.join(self.convert_to_c(e, func = func) for e in ast['arg']) if 'arg' in ast else ''})" if 'arg' in ast else f"f_{ast['cnt']}(0)"
 
         elif ast["type"] == "int":
             if first:
@@ -125,7 +125,9 @@ class Generator:
                     self.indent -= 1
                     out = out[:-4] + "}"
             elif ast["cnt"] == "BREAK":
-                out += "break;\n"
+                out += "break;"
+            elif ast["cnt"] == "CONTINUE":
+                out += "continue;"
             else:
                 self.debug_print("convert_to_c", f"ERROR: unknown keyword '{ast['cnt']}'", 0)
 

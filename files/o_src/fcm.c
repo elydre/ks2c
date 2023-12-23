@@ -107,6 +107,82 @@ obj_t f_mul(int n, obj_t a, obj_t b) {
     return NONE_OBJ;
 }
 
+obj_t f_eql(int n, obj_t a, obj_t b) {
+    if (n != 2) {
+        printf("error: eql takes 2 arguments, got %d\n", n);
+        return NONE_OBJ;
+    }
+
+    if (a.type == INTEGER && b.type == INTEGER) {
+        return BOOLEAN_OBJ(a.int_val == b.int_val);
+    } else if (a.type == FLOAT && b.type == FLOAT) {
+        return BOOLEAN_OBJ(a.flt_val == b.flt_val);
+    } else if (
+        (a.type == STRING || a.type == ALLOCATED_STRING) &&
+        (b.type == STRING || b.type == ALLOCATED_STRING)
+    ) {
+        int res = strcmp(a.str_ptr, b.str_ptr) == 0;
+        if (a.type == ALLOCATED_STRING)
+            free(a.str_ptr);
+        if (b.type == ALLOCATED_STRING)
+            free(b.str_ptr);
+        return BOOLEAN_OBJ(res);
+    } else if (a.type == BOOLEAN && b.type == BOOLEAN) {
+        return BOOLEAN_OBJ(a.int_val == b.int_val);
+    } else if (a.type == NONE && b.type == NONE) {
+        return BOOLEAN_OBJ(1);
+    } else {
+        printf("error: unsupported type for eql [%d] [%d]\n", a.type, b.type);
+    }
+    return NONE_OBJ;
+}
+
+obj_t f_inf(int n, obj_t a, obj_t b) {
+    if (n != 2) {
+        printf("error: inf takes 2 arguments, got %d\n", n);
+        return NONE_OBJ;
+    }
+
+    if (a.type == INTEGER && b.type == INTEGER) {
+        return BOOLEAN_OBJ(a.int_val < b.int_val);
+    } else if (a.type == FLOAT && b.type == FLOAT) {
+        return BOOLEAN_OBJ(a.flt_val < b.flt_val);
+    } else {
+        printf("error: unsupported type for inf [%d] [%d]\n", a.type, b.type);
+    }
+    return NONE_OBJ;
+}
+
+obj_t f_sup(int n, obj_t a, obj_t b) {
+    if (n != 2) {
+        printf("error: sup takes 2 arguments, got %d\n", n);
+        return NONE_OBJ;
+    }
+
+    if (a.type == INTEGER && b.type == INTEGER) {
+        return BOOLEAN_OBJ(a.int_val > b.int_val);
+    } else if (a.type == FLOAT && b.type == FLOAT) {
+        return BOOLEAN_OBJ(a.flt_val > b.flt_val);
+    } else {
+        printf("error: unsupported type for sup [%d] [%d]\n", a.type, b.type);
+    }
+    return NONE_OBJ;
+}
+
+obj_t f_mod(int n, obj_t a, obj_t b) {
+    if (n != 2) {
+        printf("error: mod takes 2 arguments, got %d\n", n);
+        return NONE_OBJ;
+    }
+
+    if (a.type == INTEGER && b.type == INTEGER) {
+        return INTEGER_OBJ(a.int_val % b.int_val);
+    } else {
+        printf("error: unsupported type for mod [%d] [%d]\n", a.type, b.type);
+    }
+    return NONE_OBJ;
+}
+
 obj_t f_type(int n, obj_t a) {
     if (n != 1) {
         printf("error: type takes 1 argument, got %d\n", n);
