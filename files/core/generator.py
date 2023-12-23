@@ -12,6 +12,8 @@ ___________________________________
  - Licence : GNU GPL v3
 '''
 
+import core.tools as tools
+
 version = "g-1.1"
 
 file_empty = """
@@ -106,7 +108,7 @@ class Generator:
 
         elif ast["type"] == "keyword":
             if not first:
-                self.debug_print("convert_to_c", f"error: keyword '{ast['cnt']}' not at the beginning of a line", 0)
+                tools.raise_error(f"keyword '{ast['cnt']}' not at the beginning of a line")
             elif ast["cnt"] == "IF":
                 out += f"if (fi_is({self.convert_to_c(ast['arg'][0], func = func)}))" + " {"
                 self.indent += 1
@@ -121,7 +123,7 @@ class Generator:
                 self.indent += 1
             elif ast["cnt"] == "END":
                 if not self.indent:
-                    self.debug_print("convert_to_c", f"error: nothing to end", 0)
+                    tools.raise_error("find 'end' but no block to close")
                 else:
                     self.indent -= 1
                     out = out[:-4] + "}"
@@ -130,10 +132,10 @@ class Generator:
             elif ast["cnt"] == "CONTINUE":
                 out += "continue;"
             else:
-                self.debug_print("convert_to_c", f"ERROR: unknown keyword '{ast['cnt']}'", 0)
+                tools.raise_error(f"unknown keyword '{ast['cnt']}'")
 
         else:
-            print(f"ERROR: unknown type '{ast['type']}'")
+            tools.raise_error(f"unknown type '{ast['type']}'")
 
         self.debug_print("convert_to_c", f"{out}", 3)
         return out

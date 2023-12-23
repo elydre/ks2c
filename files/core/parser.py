@@ -12,8 +12,8 @@ ___________________________________
  - Licence : GNU GPL v3
 '''
 
+import core.tools as tools
 from operator import xor
-
 
 version = "p-1.6"
 
@@ -111,12 +111,12 @@ class Parser:
             for elm in dico["cde"]:
                 out.append(self.ast_parse(elm))
 
-            self.debug_print("parse_line", f"merge de: {old}", 3)
-            self.debug_print("parse_line", f"avec: {out}", 3)
+            self.debug_print("parse_line", f"merge: {old}", 3)
+            self.debug_print("parse_line", f"whis: {out}", 3)
 
             out = self.parse_merge(old, out)
 
-            self.debug_print("parse_line", f"fin du merge: {out}", 2)
+            self.debug_print("parse_line", f"end of merge: {out}", 2)
 
             for i in range(len(out)):
                 if out[i]["type"] == "var":
@@ -148,7 +148,7 @@ class Parser:
                         old = dico["oph"]
                         continue
                     msg = f"'{''.join([d['cnt'] for d in dico['cde'][0]])}'"
-                    self.debug_print("check", f"ERROR #push: ({a} != {b}) dans {msg}", 1)
+                    tools.raise_error(f"#push: ({a} != {b}) in {msg}")
                     return False
         return True
 

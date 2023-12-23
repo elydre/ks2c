@@ -16,8 +16,7 @@ version = "l-1.6"
 
 class Lexer:
 
-    # TODO:
-    # gestion des commentaires
+    # TODO: support for comments
     
     def __init__(self, file: str, debug_lvl: int = 0) -> None:
         self.brut = file
@@ -26,9 +25,9 @@ class Lexer:
         self.keywords = ["LOOP", "IF", "END", "BREAK", "FUNC", "RETURN", "WHILE", "ELSE", "CONTINUE"]
 
 
-    def debug_print(self, fonc_name: str, text: str, level: int) -> None:
+    def debug_print(self, func_name: str, text: str, level: int) -> None:
         if self.debug_lvl >= level:
-            print(f"LXR - {level}| {fonc_name} : {text}")
+            print(f"LXR - {level}| {func_name} : {text}")
 
 
     def get_type(self, cde: str) -> dict:
@@ -136,7 +135,7 @@ class Lexer:
         return sortie
 
     def sup_space(self, e: str) -> str:
-        # suppression des espaces et gestion des sauts de ligne
+        # removing spaces and handling line breaks
         in_string = False
         out = ""
         for car in e:
