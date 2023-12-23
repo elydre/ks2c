@@ -1,5 +1,5 @@
 # input / output files
-files/o_src/main.c
+o_src/main.c
 input.ks
 
 # python cache

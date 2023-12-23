@@ -19,8 +19,6 @@ KS => ks2c => C => make => out-file
 ## Build and run
 
 ```sh
-cd files/
-
 # Compile the KS to C
 python3 main.py
 
