@@ -17,9 +17,7 @@ version = "g-1.1"
 file_empty = """
 #include "ks.h"
 
-/*
 <vars>
-*/
 
 <func>
 
@@ -46,9 +44,9 @@ class Generator:
         output = file_empty.replace(
                 "<code>", f"\n{' '*4}".join(self.generated)
             ).replace("<func>", "\n".join([])).replace(
-                "<vars>", "\n".join(k + '\n' + '\n'.join(
+                "<vars>", ("/*" + "\n".join(f"\n{k}\n" + "\n".join(
                     f'  {x}: {i}' for i, x in enumerate(e)
-                ) for k, e in self.vars.items())
+                ) for k, e in self.vars.items())) + "\n*/" if self.vars else ""
             )[1:]
 
         while "\n\n\n" in output:
@@ -117,6 +115,9 @@ class Generator:
                 self.indent += 1
             elif ast["cnt"] == "WHILE":
                 out += f"while (fi_is({self.convert_to_c(ast['arg'][0], func = func)}))" + " {"
+                self.indent += 1
+            elif ast["cnt"] == "LOOP":
+                out += f"for (int i = fi_int_val({self.convert_to_c(ast['arg'][0], func = func)}); i > 0; i--)" + " {"
                 self.indent += 1
             elif ast["cnt"] == "END":
                 if not self.indent:

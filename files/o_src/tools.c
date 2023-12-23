@@ -92,3 +92,24 @@ int fi_is(obj_t o) {
     fi_clean_obj(o);
     return ret;
 }
+
+int fi_int_val(obj_t o) {
+    int ret = 0;
+    if (o.type == INTEGER) {
+        ret = o.int_val;
+    } else if (o.type == FLOAT) {
+        ret = (int) o.flt_val;
+    } else if (o.type == ALLOCATED_STRING) {
+        ret = atoi(o.str_ptr);
+    } else if (o.type == STRING) {
+        ret = atoi(o.str_ptr);
+    } else if (o.type == BOOLEAN) {
+        ret = o.int_val;
+    } else if (o.type == NONE) {
+        ret = 0;
+    } else {
+        printf("fi_int_val: unknown type [%d]\n", o.type);
+    }
+    fi_clean_obj(o);
+    return ret;
+}
