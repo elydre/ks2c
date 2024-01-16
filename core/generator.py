@@ -23,8 +23,9 @@ file_empty = """
 <func>
 
 int main(void) {
+    vars_t local_vars = {NULL, 0};
     <code>
-    fi_clean_up();
+    fi_clean_up(&local_vars);
     return 0;
 }
 """
@@ -98,12 +99,16 @@ class Generator:
             if not ast["cnt"][1:] in self.vars[func]:
                 self.vars[func].append(ast["cnt"][1:])
             var_index = self.vars[func].index(ast["cnt"][1:])
-            func_index = list(self.vars.keys()).index(func)
 
             if first:
-                out += f"fi_create_var({func_index}, {var_index}, {self.convert_to_c(ast['arg'][0], func = func)});"
+                if ast['arg'][0]['type'] == "keyword" and ast['arg'][0]['cnt'] == "LOOP":
+                    out = self.convert_to_c(ast['arg'][0], first = True, func = func)
+                    out += "\n" + " " * (self.indent + 1) * 4
+                    out += f"fi_create_var(&local_vars, {var_index}, INTEGER_OBJ(i));"
+                else:
+                    out += f"fi_create_var(&local_vars, {var_index}, {self.convert_to_c(ast['arg'][0], func = func)});"
             else:
-                out += f"fi_get_var({func_index}, {var_index})"
+                out += f"fi_get_var(&local_vars, {var_index})"
 
         elif ast["type"] == "keyword":
             if not first:
@@ -112,7 +117,7 @@ class Generator:
                 out += f"if (fi_is({self.convert_to_c(ast['arg'][0], func = func)}))" + " {"
                 self.indent += 1
             elif ast["cnt"] == "ELSE":
-                out += f"else" + "{\n"
+                out += f"else" + " {"
                 self.indent += 1
             elif ast["cnt"] == "WHILE":
                 out += f"while (fi_is({self.convert_to_c(ast['arg'][0], func = func)}))" + " {"
