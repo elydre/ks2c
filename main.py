@@ -32,6 +32,8 @@ parser.add_option("-o", "--output", dest="output", default=f"{os.path.dirname(os
 options = parser.parse_args()
 
 if options[0].file == False and len(options) >= 2:
+    if len(options[1]) != 1:
+        tools.raise_error("File name must be specified")
     options[0].file = options[1][0]
 options = options[0]
 
