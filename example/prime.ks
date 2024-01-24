@@ -17,5 +17,5 @@ $n -= 999 999 > WHILE
         END
         $i + 4 > $i
     END
-        $n, "prime" >> print
+    $n, "prime" >> print
 END
