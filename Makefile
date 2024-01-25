@@ -25,6 +25,6 @@ $(NAME): $(OBJS)
 
 clean:
 	@echo "$(COL_CC)Cleaning objects...$(COL_RE)"
-	@$(RM) $(OBJS) $(NAME)
+	@$(RM) o_src/*.o $(NAME)
 
 re:	clean $(NAME)

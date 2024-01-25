@@ -35,7 +35,7 @@ if options[0].file == False and len(options) >= 2:
     if len(options[1]) > 1:
         tools.raise_error("Too many files specified")
     if len(options[1]) == 1:
-  	  	options[0].file = options[1][0]
+            options[0].file = options[1][0]
 options = options[0]
 
 if options.debug:
