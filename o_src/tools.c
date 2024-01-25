@@ -12,10 +12,6 @@
  *   - License : GNU GPL v3              *
 ******************************************/
 
-#include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
-
 #include "ks.h"
 
 void fi_clean_obj(obj_t o) {

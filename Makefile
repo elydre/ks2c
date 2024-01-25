@@ -1,4 +1,4 @@
-.PHONY:	all clean fclean re
+.PHONY: clean re
 
 SRCS	=	o_src/main.c \
 			o_src/fcm.c \
@@ -12,18 +12,19 @@ CFLAGS	= -Wall -Wextra -Werror
 
 NAME	= prog.out
 
-all: $(NAME)
-
-%.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
+COL_CC	= \033[0;30m
+COL_RE	= \033[0m
 
 $(NAME): $(OBJS)
-	$(CC) $(CFLAGS) -o $(NAME) $(OBJS)
+	@echo "$(COL_CC)Linking:	$(NAME)$(COL_RE)"
+	@$(CC) $(CFLAGS) -o $(NAME) $(OBJS)
+
+%.o: %.c
+	@echo "$(COL_CC)Compiling:	$<$(COL_RE)"
+	@$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	$(RM) $(OBJS)
+	@echo "$(COL_CC)Cleaning objects...$(COL_RE)"
+	@$(RM) $(OBJS) $(NAME)
 
-fclean:	clean
-	$(RM) $(NAME)
-
-re:	fclean $(NAME)
+re:	clean $(NAME)

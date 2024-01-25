@@ -22,7 +22,7 @@ import os, core.tools as tools
 LEXER -token-> PARSER -ast-> GENERATOR -> C
 """
 
-version = "m-1.1"
+version = "2.1"
 
 parser = OptionParser()
 
@@ -32,9 +32,10 @@ parser.add_option("-o", "--output", dest="output", default=f"{os.path.dirname(os
 options = parser.parse_args()
 
 if options[0].file == False and len(options) >= 2:
-    if len(options[1]) != 1:
-        tools.raise_error("File name must be specified")
-    options[0].file = options[1][0]
+    if len(options[1]) > 1:
+        tools.raise_error("Too many files specified")
+    if len(options[1]) == 1:
+  	  	options[0].file = options[1][0]
 options = options[0]
 
 if options.debug:
@@ -53,12 +54,12 @@ def get_data(file_name: str):
             tools.raise_error(f"File '{file_name}' not found")
 
     print("No file specified, please enter your code")
-    print("Press Ctrl+D to end input")
+    print("Press Ctrl+D to end input, Ctrl+C to exit")
 
     user_input = ""
     while True:
         try:
-            user_input += input("> ") + "\n"
+            user_input += input("~ ") + "\n"
         except EOFError:
             break
     print()

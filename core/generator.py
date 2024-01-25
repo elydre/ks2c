@@ -13,8 +13,6 @@ ___________________________________
 
 import core.tools as tools
 
-version = "g-1.1"
-
 file_empty = """
 #include "ks.h"
 
@@ -47,7 +45,7 @@ class Generator:
                 "<code>", f"\n{' '*4}".join(self.generated)
             ).replace("<func>", "\n".join([])).replace(
                 "<vars>", ("/*" + "\n".join(f"\n{k}\n" + "\n".join(
-                    f'  {x}: {i}' for i, x in enumerate(e)
+                    f'  \"{x}\": {i}' for i, x in enumerate(e)
                 ) for k, e in self.vars.items())) + "\n*/" if self.vars else ""
             )[1:]
 

@@ -14,8 +14,6 @@ ___________________________________
 import core.tools as tools
 from operator import xor
 
-version = "p-1.6"
-
 class Parser:
     def __init__(self, inp: list, debug_lvl: int = 0) -> None:
         self.inp = inp

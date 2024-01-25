@@ -11,8 +11,6 @@ ___________________________________
  - License : GNU GPL v3
 '''
 
-version = "l-1.6"
-
 class Lexer:
 
     # TODO: support for comments

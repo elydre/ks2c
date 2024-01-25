@@ -15,7 +15,10 @@
 #ifndef KS_H
 #define KS_H
 
-#include <stddef.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdarg.h>
+#include <stdio.h>
 
 #define VERSION "k-2.2"
 
