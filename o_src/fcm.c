@@ -38,6 +38,7 @@ obj_t f_print(int n, ...) {
             free(o.str_ptr);
         } else {
             printf("unknown type [%d]", o.type);
+            fi_clean_obj(o);
         }
         putchar(' ');
     }
@@ -47,14 +48,14 @@ obj_t f_print(int n, ...) {
 }
 
 obj_t f_type(int n, obj_t a) {
-    if (n != 1) {
-        printf("error: type takes 1 argument, got %d\n", n);
-        return NONE_OBJ;
-    }
+    UNUSED(n);
 
     if (a.type == INTEGER) {
         return STRING_OBJ("int");
-    } else if (a.type == STRING || a.type == ALLOCATED_STRING) {
+    } else if (a.type == STRING) {
+        return STRING_OBJ("str");
+    } else if (a.type == ALLOCATED_STRING) {
+        free(a.str_ptr);
         return STRING_OBJ("str");
     } else if (a.type == BOOLEAN) {
         return STRING_OBJ("bool");
@@ -62,18 +63,96 @@ obj_t f_type(int n, obj_t a) {
         return STRING_OBJ("float");
     } else if (a.type == NONE) {
         return STRING_OBJ("none");
-    } else {
-        printf("error: unknown type [%d]\n", a.type);
     }
+    printf("error: unknown type [%d]\n", a.type);
+    fi_clean_obj(a);
     return NONE_OBJ;
 }
 
 obj_t f_pass(int n, obj_t a) {
-    if (n != 1) {
-        printf("error: pass takes 1 argument, got %d\n", n);
-        return NONE_OBJ;
-    }
+    UNUSED(n);
     return a;
+}
+
+/*****************************************
+ *                                      *
+ *          Casting functions           *
+ *                                      *
+*****************************************/
+
+obj_t f_int(int n, obj_t a) {
+    UNUSED(n);
+
+    if (a.type == INTEGER) {
+        return a;
+    } else if (a.type == FLOAT) {
+        return INTEGER_OBJ((int) a.flt_val);
+    } else if (a.type == ALLOCATED_STRING) {
+        int res = atoi(a.str_ptr);
+        free(a.str_ptr);
+        return INTEGER_OBJ(res);
+    } else if (a.type == STRING) {
+        int res = atoi(a.str_ptr);
+        return INTEGER_OBJ(res);
+    } else if (a.type == BOOLEAN) {
+        return INTEGER_OBJ(a.int_val);
+    } else if (a.type == NONE) {
+        return INTEGER_OBJ(0);
+    }
+    printf("error: unsupported type for int [%d]\n", a.type);
+    fi_clean_obj(a);
+    return NONE_OBJ;
+}
+
+obj_t f_float(int n, obj_t a) {
+    UNUSED(n);
+
+    if (a.type == INTEGER) {
+        return FLOAT_OBJ((float) a.int_val);
+    } else if (a.type == FLOAT) {
+        return a;
+    } else if (a.type == ALLOCATED_STRING) {
+        float res = atof(a.str_ptr);
+        free(a.str_ptr);
+        return FLOAT_OBJ(res);
+    } else if (a.type == STRING) {
+        float res = atof(a.str_ptr);
+        return FLOAT_OBJ(res);
+    } else if (a.type == BOOLEAN) {
+        return FLOAT_OBJ(a.int_val);
+    } else if (a.type == NONE) {
+        return FLOAT_OBJ(0.0);
+    }
+    printf("error: unsupported type for float [%d]\n", a.type);
+    fi_clean_obj(a);
+    return NONE_OBJ;
+}
+
+obj_t f_str(int n, obj_t a) {
+    UNUSED(n);
+
+    if (a.type == INTEGER) {
+        char *buf = malloc(12);
+        sprintf(buf, "%d", a.int_val);
+        return ALLOCATED_STRING_OBJ(buf);
+    } else if (a.type == FLOAT) {
+        char *buf = malloc(12);
+        sprintf(buf, "%f", a.flt_val);
+        return ALLOCATED_STRING_OBJ(buf);
+    } else if (a.type == ALLOCATED_STRING) {
+        return a;
+    } else if (a.type == STRING) {
+        return a;
+    } else if (a.type == BOOLEAN) {
+        char *buf = malloc(6);
+        sprintf(buf, "%s", a.int_val ? "true" : "false");
+        return ALLOCATED_STRING_OBJ(buf);
+    } else if (a.type == NONE) {
+        return ALLOCATED_STRING_OBJ("");
+    }
+    printf("error: unsupported type for str [%d]\n", a.type);
+    fi_clean_obj(a);
+    return NONE_OBJ;
 }
 
 /*****************************************
@@ -83,10 +162,7 @@ obj_t f_pass(int n, obj_t a) {
 *****************************************/
 
 obj_t f_add(int n, obj_t a, obj_t b) {
-    if (n != 2) {
-        printf("error: add takes 2 arguments, got %d\n", n);
-        return NONE_OBJ;
-    }
+    UNUSED(n);
 
     if (a.type == INTEGER && b.type == INTEGER) {
         return INTEGER_OBJ(a.int_val + b.int_val);
@@ -99,38 +175,32 @@ obj_t f_add(int n, obj_t a, obj_t b) {
         char *buf = malloc(strlen(a.str_ptr) + strlen(b.str_ptr) + 1);
         strcpy(buf, a.str_ptr);
         strcat(buf, b.str_ptr);
-        if (a.type == ALLOCATED_STRING)
-            free(a.str_ptr);
-        if (b.type == ALLOCATED_STRING)
-            free(b.str_ptr);
+        fi_clean_obj(a);
+        fi_clean_obj(b);
         return ALLOCATED_STRING_OBJ(buf);
-    } else {
-        printf("error: unsupported type for add [%d] [%d]\n", a.type, b.type);
     }
+    printf("error: unsupported type for add [%d] [%d]\n", a.type, b.type);
+    fi_clean_obj(a);
+    fi_clean_obj(b);
     return NONE_OBJ;
 }
 
 obj_t f_sub(int n, obj_t a, obj_t b) {
-    if (n != 2) {
-        printf("error: sub takes 2 arguments, got %d\n", n);
-        return NONE_OBJ;
-    }
+    UNUSED(n);
 
     if (a.type == INTEGER && b.type == INTEGER) {
         return INTEGER_OBJ(a.int_val - b.int_val);
     } else if (a.type == FLOAT && b.type == FLOAT) {
         return FLOAT_OBJ(a.flt_val - b.flt_val);
-    } else {
-        printf("error: unsupported type for sub [%d] [%d]\n", a.type, b.type);
     }
+    printf("error: unsupported type for sub [%d] [%d]\n", a.type, b.type);
+    fi_clean_obj(a);
+    fi_clean_obj(b);
     return NONE_OBJ;
 }
 
 obj_t f_mul(int n, obj_t a, obj_t b) {
-    if (n != 2) {
-        printf("error: mul takes 2 arguments, got %d\n", n);
-        return NONE_OBJ;
-    }
+    UNUSED(n);
 
     if (a.type == INTEGER && b.type == INTEGER) {
         return INTEGER_OBJ(a.int_val * b.int_val);
@@ -149,34 +219,29 @@ obj_t f_mul(int n, obj_t a, obj_t b) {
         for (int i = 0; i < b.int_val; i++) {
             strcat(buf, a.str_ptr);
         }
-        if (a.type == ALLOCATED_STRING)
-            free(a.str_ptr);
+        fi_clean_obj(a);
         return ALLOCATED_STRING_OBJ(buf);
-    } else {
-        printf("error: unsupported type for mul [%d] [%d]\n", a.type, b.type);
     }
+    printf("error: unsupported type for mul [%d] [%d]\n", a.type, b.type);
+    fi_clean_obj(a);
+    fi_clean_obj(b);
     return NONE_OBJ;
 }
 
 obj_t f_mod(int n, obj_t a, obj_t b) {
-    if (n != 2) {
-        printf("error: mod takes 2 arguments, got %d\n", n);
-        return NONE_OBJ;
-    }
+    UNUSED(n);
 
     if (a.type == INTEGER && b.type == INTEGER) {
         return INTEGER_OBJ(a.int_val % b.int_val);
-    } else {
-        printf("error: unsupported type for mod [%d] [%d]\n", a.type, b.type);
     }
+    printf("error: unsupported type for mod [%d] [%d]\n", a.type, b.type);
+    fi_clean_obj(a);
+    fi_clean_obj(b);
     return NONE_OBJ;
 }
 
-obj_t f_edv(int n, obj_t a, obj_t b) {
-    if (n != 2) {
-        printf("error: edv takes 2 arguments, got %d\n", n);
-        return NONE_OBJ;
-    }
+obj_t f_div(int n, obj_t a, obj_t b) {
+    UNUSED(n);
 
     if (a.type == INTEGER && b.type == INTEGER) {
         return INTEGER_OBJ(a.int_val / b.int_val);
@@ -186,10 +251,10 @@ obj_t f_edv(int n, obj_t a, obj_t b) {
         return FLOAT_OBJ(a.int_val / b.flt_val);
     } else if (a.type == FLOAT && b.type == INTEGER) {
         return FLOAT_OBJ(a.flt_val / b.int_val);
-    } else {
-        printf("error: unsupported type for edv [%d] [%d]\n", a.type, b.type);
     }
-
+    printf("error: unsupported type for edv [%d] [%d]\n", a.type, b.type);
+    fi_clean_obj(a);
+    fi_clean_obj(b);
     return NONE_OBJ;
 }
 
@@ -200,10 +265,7 @@ obj_t f_edv(int n, obj_t a, obj_t b) {
 *****************************************/
 
 obj_t f_eql(int n, obj_t a, obj_t b) {
-    if (n != 2) {
-        printf("error: eql takes 2 arguments, got %d\n", n);
-        return NONE_OBJ;
-    }
+    UNUSED(n);
 
     if (a.type == INTEGER && b.type == INTEGER) {
         return BOOLEAN_OBJ(a.int_val == b.int_val);
@@ -214,26 +276,22 @@ obj_t f_eql(int n, obj_t a, obj_t b) {
         (b.type == STRING || b.type == ALLOCATED_STRING)
     ) {
         int res = strcmp(a.str_ptr, b.str_ptr) == 0;
-        if (a.type == ALLOCATED_STRING)
-            free(a.str_ptr);
-        if (b.type == ALLOCATED_STRING)
-            free(b.str_ptr);
+        fi_clean_obj(a);
+        fi_clean_obj(b);
         return BOOLEAN_OBJ(res);
     } else if (a.type == BOOLEAN && b.type == BOOLEAN) {
         return BOOLEAN_OBJ(a.int_val == b.int_val);
     } else if (a.type == NONE && b.type == NONE) {
         return BOOLEAN_OBJ(1);
-    } else {
-        printf("error: unsupported type for eql [%d] [%d]\n", a.type, b.type);
     }
+    printf("error: unsupported type for eql [%d] [%d]\n", a.type, b.type);
+    fi_clean_obj(a);
+    fi_clean_obj(b);
     return NONE_OBJ;
 }
 
 obj_t f_neq(int n, obj_t a, obj_t b) {
-    if (n != 2) {
-        printf("error: neq takes 2 arguments, got %d\n", n);
-        return NONE_OBJ;
-    }
+    UNUSED(n);
 
     obj_t res = f_eql(2, a, b);
     if (res.type == BOOLEAN) {
@@ -243,34 +301,30 @@ obj_t f_neq(int n, obj_t a, obj_t b) {
 }
 
 obj_t f_inf(int n, obj_t a, obj_t b) {
-    if (n != 2) {
-        printf("error: inf takes 2 arguments, got %d\n", n);
-        return NONE_OBJ;
-    }
+    UNUSED(n);
 
     if (a.type == INTEGER && b.type == INTEGER) {
         return BOOLEAN_OBJ(a.int_val < b.int_val);
     } else if (a.type == FLOAT && b.type == FLOAT) {
         return BOOLEAN_OBJ(a.flt_val < b.flt_val);
-    } else {
-        printf("error: unsupported type for inf [%d] [%d]\n", a.type, b.type);
     }
+    printf("error: unsupported type for inf [%d] [%d]\n", a.type, b.type);
+    fi_clean_obj(a);
+    fi_clean_obj(b);
     return NONE_OBJ;
 }
 
 obj_t f_sup(int n, obj_t a, obj_t b) {
-    if (n != 2) {
-        printf("error: sup takes 2 arguments, got %d\n", n);
-        return NONE_OBJ;
-    }
+    UNUSED(n);
 
     if (a.type == INTEGER && b.type == INTEGER) {
         return BOOLEAN_OBJ(a.int_val > b.int_val);
     } else if (a.type == FLOAT && b.type == FLOAT) {
         return BOOLEAN_OBJ(a.flt_val > b.flt_val);
-    } else {
-        printf("error: unsupported type for sup [%d] [%d]\n", a.type, b.type);
     }
+    printf("error: unsupported type for sup [%d] [%d]\n", a.type, b.type);
+    fi_clean_obj(a);
+    fi_clean_obj(b);
     return NONE_OBJ;
 }
 
@@ -282,50 +336,43 @@ obj_t f_sup(int n, obj_t a, obj_t b) {
 *****************************************/
 
 obj_t f_not(int n, obj_t a) {
-    if (n != 1) {
-        printf("error: not takes 1 argument, got %d\n", n);
-        return NONE_OBJ;
-    }
+    UNUSED(n);
 
     if (a.type == BOOLEAN || a.type == INTEGER) {
         return BOOLEAN_OBJ(!a.int_val);
-    } else {
-        printf("error: unsupported type for not [%d]\n", a.type);
     }
+    printf("error: unsupported type for not [%d]\n", a.type);
+    fi_clean_obj(a);
     return NONE_OBJ;
 }
 
 obj_t f_or(int n, obj_t a, obj_t b) {
-    if (n != 2) {
-        printf("error: or takes 2 arguments, got %d\n", n);
-        return NONE_OBJ;
-    }
+    UNUSED(n);
 
     if (
         (a.type == BOOLEAN || a.type == INTEGER) &&
         (b.type == BOOLEAN || b.type == INTEGER)
     ) {
         return BOOLEAN_OBJ(a.int_val || b.int_val);
-    } else {
-        printf("error: unsupported type for or [%d] [%d]\n", a.type, b.type);
     }
+    printf("error: unsupported type for or [%d] [%d]\n", a.type, b.type);
+    fi_clean_obj(a);
+    fi_clean_obj(b);
     return NONE_OBJ;
 }
 
 
 obj_t f_and(int n, obj_t a, obj_t b) {
-    if (n != 2) {
-        printf("error: and takes 2 arguments, got %d\n", n);
-        return NONE_OBJ;
-    }
+    UNUSED(n);
 
     if (
         (a.type == BOOLEAN || a.type == INTEGER) &&
         (b.type == BOOLEAN || b.type == INTEGER)
     ) {
         return BOOLEAN_OBJ(a.int_val && b.int_val);
-    } else {
-        printf("error: unsupported type for and [%d] [%d]\n", a.type, b.type);
     }
+    printf("error: unsupported type for and [%d] [%d]\n", a.type, b.type);
+    fi_clean_obj(a);
+    fi_clean_obj(b);
     return NONE_OBJ;
 }

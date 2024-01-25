@@ -23,7 +23,7 @@ class Parser:
             "**": "pow",
             "%":  "mod",
             "*":  "mul",
-            "/":  "edv",
+            "/":  "div",
             "+":  "add",
             "-":  "sub",
             "==": "eql",

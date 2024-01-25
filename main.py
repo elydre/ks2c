@@ -22,7 +22,7 @@ import os, core.tools as tools
 LEXER -token-> PARSER -ast-> GENERATOR -> C
 """
 
-version = "2.1"
+version = "2.2"
 
 parser = OptionParser()
 
