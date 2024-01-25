@@ -123,7 +123,7 @@ class Generator:
                 out += f"while (fi_is({self.convert_to_c(ast['arg'][0], func = func)}))" + " {"
                 self.indent += 1
             elif ast["cnt"] == "LOOP":
-                out += f"for (int i = fi_int_val({self.convert_to_c(ast['arg'][0], func = func)}); i > 0; i--)" + " {"
+                out += f"for (int i = 0, max = fi_int_val({self.convert_to_c(ast['arg'][0], func = func)}); i < max; i++)" + " {"
                 self.indent += 1
             elif ast["cnt"] == "END":
                 if not self.indent:
