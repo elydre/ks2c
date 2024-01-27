@@ -31,7 +31,7 @@ chain_t *chain_head = NULL;
 chain_t *used_chain_head = NULL;
 
 obj_t *fi_get_address(void) {
-    #ifdef CUSTOM_MALLOC
+    #if CUSTOM_MALLOC
     if (chain_head == NULL) {
         return malloc(sizeof(obj_t));
     }
@@ -49,7 +49,7 @@ obj_t *fi_get_address(void) {
 }
 
 void fi_free_address(obj_t *o) {
-    #ifdef CUSTOM_MALLOC
+    #if CUSTOM_MALLOC
     if (o == NULL) {
         return;
     }
@@ -76,7 +76,7 @@ void fi_free_address(obj_t *o) {
 }
 
 void fi_free_all(void) {
-    #ifdef CUSTOM_MALLOC
+    #if CUSTOM_MALLOC
     chain_t *tmp = chain_head;
     while (tmp != NULL) {
         chain_t *next = tmp->next;
@@ -188,6 +188,9 @@ void fi_create_var(vars_t *vars, int var_id, obj_t *o) {
     o->ref_count++;
 }
 
+
+#if BYPASS_GETVAR
+#else
 obj_t *fi_get_var(vars_t *vars, int var_id) {
     if (vars->len <= var_id) {
         return &NONE_OBJ;
@@ -195,6 +198,7 @@ obj_t *fi_get_var(vars_t *vars, int var_id) {
 
     return vars->arr[var_id];
 }
+#endif
 
 int fi_is(obj_t *o) {
     int ret = 0;

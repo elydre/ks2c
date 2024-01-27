@@ -17,7 +17,7 @@ $n -= 999 999 > WHILE
         END
         $i + 4 > $i
     END
-    $i != 0 > IF
+    $i > not > IF
         $n > print
     END
 END

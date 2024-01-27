@@ -22,7 +22,8 @@
 
 #define VERSION "2.3"
 
-#define CUSTOM_MALLOC
+#define CUSTOM_MALLOC 1
+#define BYPASS_GETVAR 1
 
 #ifndef UNUSED
 #define UNUSED(x) (void)(x)
@@ -58,8 +59,13 @@ extern obj_t NONE_OBJ;
 void   fi_clean_obj(obj_t *obj);
 void   fi_clean_up(vars_t *vars);
 
-void   fi_create_var(vars_t *vars, int var_id, obj_t *o);
+#if BYPASS_GETVAR
+#define fi_get_var(vars, var_id) ((vars)->arr[var_id])
+#else
 obj_t *fi_get_var(vars_t *vars, int var_id);
+#endif
+
+void   fi_create_var(vars_t *vars, int var_id, obj_t *o);
 
 int fi_is(obj_t *o);
 int fi_int_val(obj_t *o);

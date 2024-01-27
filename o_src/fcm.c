@@ -378,6 +378,10 @@ obj_t *f_not(int n, obj_t *a) {
 
     if (a->type == BOOLEAN) {
         res = fi_new_boolean_obj(!a->int_val);
+    } else if (a->type == INTEGER) {
+        res = fi_new_boolean_obj(!a->int_val);
+    } else if (a->type == FLOAT) {
+        res = fi_new_boolean_obj(!a->flt_val);
     } else {
         printf("error: unsupported type for not [%d]\n", a->type);
         res = &NONE_OBJ;
