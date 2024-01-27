@@ -71,25 +71,25 @@ class Generator:
             if first:
                 self.debug_print("convert_to_c", f"deleting unused object {ast['cnt']}", 3)
             else:
-                out += f"INTEGER_OBJ({ast['cnt']})"
+                out += f"fi_new_integer_obj({ast['cnt']})"
 
         elif ast["type"] == "string":
             if first:
                 self.debug_print("convert_to_c", f"deleting unused object {ast['cnt']}", 3)
             else:
-                out += f"STRING_OBJ({ast['cnt']})"
-        
+                out += f"fi_new_string_obj({ast['cnt']})"
+
         elif ast["type"] == "float":
             if first:
                 self.debug_print("convert_to_c", f"deleting unused object {ast['cnt']}", 3)
             else:
-                out += f"FLOAT_OBJ({ast['cnt']})"
+                out += f"fi_new_float_obj({ast['cnt']})"
 
         elif ast["type"] == "bool":
             if first:
                 self.debug_print("convert_to_c", f"deleting unused object {ast['cnt']}", 3)
             else:
-                out += f"BOOLEAN_OBJ({1 if ast['cnt'] == 'true' else 0})"
+                out += f"fi_new_boolean_obj({1 if ast['cnt'] == 'true' else 0})"
 
         elif ast["type"] == "var":
             if not func in self.vars.keys():
@@ -102,7 +102,7 @@ class Generator:
                 if ast['arg'][0]['type'] == "keyword" and ast['arg'][0]['cnt'] == "LOOP":
                     out = self.convert_to_c(ast['arg'][0], first = True, func = func)
                     out += "\n" + " " * (self.indent + 1) * 4
-                    out += f"fi_create_var(&local_vars, {var_index}, INTEGER_OBJ(i));"
+                    out += f"fi_create_var(&local_vars, {var_index}, fi_new_integer_obj(i));"
                 else:
                     out += f"fi_create_var(&local_vars, {var_index}, {self.convert_to_c(ast['arg'][0], func = func)});"
             else:
