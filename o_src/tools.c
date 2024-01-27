@@ -14,6 +14,8 @@
 
 #include "ks.h"
 
+obj_t NONE_OBJ = {.type = NONE};
+
 obj_t *fi_new_string_obj(char *s) {
     obj_t *o = malloc(sizeof(obj_t));
     o->type = STRING;
@@ -34,13 +36,6 @@ obj_t *fi_new_integer_obj(int i) {
     obj_t *o = malloc(sizeof(obj_t));
     o->type = INTEGER;
     o->int_val = i;
-    o->ref_count = 0;
-    return o;
-}
-
-obj_t *fi_new_none_obj(void) {
-    obj_t *o = malloc(sizeof(obj_t));
-    o->type = NONE;
     o->ref_count = 0;
     return o;
 }
@@ -68,7 +63,7 @@ obj_t *fi_new_float_obj(float f) {
 *****************************************/
 
 void fi_clean_obj(obj_t *o) {
-    if (o->ref_count > 0) {
+    if (o->ref_count > 0 || o->type == NONE) {
         return;
     }
     if (o->type == ALLOCATED_STRING) {
@@ -95,7 +90,7 @@ void fi_create_var(vars_t *vars, int var_id, obj_t *o) {
     if (vars->len <= var_id) {
         vars->arr = realloc(vars->arr, sizeof(obj_t *) * (var_id + 1));
         for (int i = vars->len; i <= var_id; i++) {
-            vars->arr[i] = fi_new_none_obj();
+            vars->arr[i] = &NONE_OBJ;
         }
         vars->len = var_id + 1;
     }
@@ -108,7 +103,7 @@ void fi_create_var(vars_t *vars, int var_id, obj_t *o) {
 
 obj_t *fi_get_var(vars_t *vars, int var_id) {
     if (vars->len <= var_id) {
-        return fi_new_none_obj();
+        return &NONE_OBJ;
     }
 
     return vars->arr[var_id];

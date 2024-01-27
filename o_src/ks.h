@@ -20,7 +20,7 @@
 #include <stdarg.h>
 #include <stdio.h>
 
-#define VERSION "2.2"
+#define VERSION "2.3"
 
 #ifndef UNUSED
 #define UNUSED(x) (void)(x)
@@ -51,6 +51,8 @@ typedef struct {
 } vars_t;
 
 // tools.c
+extern obj_t NONE_OBJ;
+
 void   fi_clean_obj(obj_t *obj);
 void   fi_clean_up(vars_t *vars);
 
@@ -63,7 +65,6 @@ int fi_int_val(obj_t *o);
 obj_t *fi_new_string_obj(char *s);
 obj_t *fi_new_allocated_string_obj(char *p);
 obj_t *fi_new_integer_obj(int i);
-obj_t *fi_new_none_obj();
 obj_t *fi_new_boolean_obj(int b);
 obj_t *fi_new_float_obj(float f);
 
