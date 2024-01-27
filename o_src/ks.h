@@ -22,6 +22,8 @@
 
 #define VERSION "2.3"
 
+#define CUSTOM_MALLOC
+
 #ifndef UNUSED
 #define UNUSED(x) (void)(x)
 #endif

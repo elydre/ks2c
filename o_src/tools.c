@@ -16,8 +16,94 @@
 
 obj_t NONE_OBJ = {.type = NONE};
 
+/*****************************************
+ *                                      *
+ *     memory allocation functions      *
+ *                                      *
+*****************************************/
+
+typedef struct chain_s {
+    void *addr;
+    struct chain_s *next;
+} chain_t;
+
+chain_t *chain_head = NULL;
+chain_t *used_chain_head = NULL;
+
+obj_t *fi_get_address(void) {
+    #ifdef CUSTOM_MALLOC
+    if (chain_head == NULL) {
+        return malloc(sizeof(obj_t));
+    }
+
+    chain_t *tmp = chain_head;
+    chain_head = chain_head->next;
+
+    tmp->next = used_chain_head;
+    used_chain_head = tmp;
+
+    return tmp->addr;
+    #else
+    return malloc(sizeof(obj_t));
+    #endif
+}
+
+void fi_free_address(obj_t *o) {
+    #ifdef CUSTOM_MALLOC
+    if (o == NULL) {
+        return;
+    }
+
+    chain_t *tmp;
+
+    if (used_chain_head == NULL) {
+        tmp = malloc(sizeof(chain_t));
+        tmp->next = chain_head;
+        tmp->addr = o;
+        chain_head = tmp;
+        return;
+    }
+
+    tmp = used_chain_head;
+    used_chain_head = used_chain_head->next;
+
+    tmp->addr = o;
+    tmp->next = chain_head;
+    chain_head = tmp;
+    #else
+    free(o);
+    #endif
+}
+
+void fi_free_all(void) {
+    #ifdef CUSTOM_MALLOC
+    chain_t *tmp = chain_head;
+    while (tmp != NULL) {
+        chain_t *next = tmp->next;
+        free(tmp->addr);
+        free(tmp);
+        tmp = next;
+    }
+    chain_head = NULL;
+
+    tmp = used_chain_head;
+    while (tmp != NULL) {
+        chain_t *next = tmp->next;
+        free(tmp);
+        tmp = next;
+    }
+    used_chain_head = NULL;
+    #endif
+}
+
+/*****************************************
+ *                                      *
+ *           object functions           *
+ *                                      *
+*****************************************/
+
 obj_t *fi_new_string_obj(char *s) {
-    obj_t *o = malloc(sizeof(obj_t));
+    obj_t *o = fi_get_address();
     o->type = STRING;
     o->str_ptr = s;
     o->ref_count = 0;
@@ -25,7 +111,7 @@ obj_t *fi_new_string_obj(char *s) {
 }
 
 obj_t *fi_new_allocated_string_obj(char *p) {
-    obj_t *o = malloc(sizeof(obj_t));
+    obj_t *o = fi_get_address();
     o->type = ALLOCATED_STRING;
     o->str_ptr = p;
     o->ref_count = 0;
@@ -33,7 +119,7 @@ obj_t *fi_new_allocated_string_obj(char *p) {
 }
 
 obj_t *fi_new_integer_obj(int i) {
-    obj_t *o = malloc(sizeof(obj_t));
+    obj_t *o = fi_get_address();
     o->type = INTEGER;
     o->int_val = i;
     o->ref_count = 0;
@@ -41,7 +127,7 @@ obj_t *fi_new_integer_obj(int i) {
 }
 
 obj_t *fi_new_boolean_obj(int b) {
-    obj_t *o = malloc(sizeof(obj_t));
+    obj_t *o = fi_get_address();
     o->type = BOOLEAN;
     o->int_val = b;
     o->ref_count = 0;
@@ -49,7 +135,7 @@ obj_t *fi_new_boolean_obj(int b) {
 }
 
 obj_t *fi_new_float_obj(float f) {
-    obj_t *o = malloc(sizeof(obj_t));
+    obj_t *o = fi_get_address();
     o->type = FLOAT;
     o->flt_val = f;
     o->ref_count = 0;
@@ -69,7 +155,7 @@ void fi_clean_obj(obj_t *o) {
     if (o->type == ALLOCATED_STRING) {
         free(o->str_ptr);
     }
-    free(o);
+    fi_free_address(o);
 }
 
 void fi_clean_up(vars_t *vars) {
@@ -78,6 +164,7 @@ void fi_clean_up(vars_t *vars) {
         fi_clean_obj(vars->arr[j]);
     }
     free(vars->arr);
+    fi_free_all();
 }
 
 /*****************************************
