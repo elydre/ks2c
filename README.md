@@ -13,14 +13,14 @@ KS => ks2kea => KEA => interpreter
 
 However the KEA remains slow, so instead of compiling the KS to KEA why not do it to C
 ```
-KS => ks2c => C => make => out-file
+KS => ks2c => C => compiler => executable
 ```
 
 ## Build and run
 
 ```sh
 # Compile the KS to C
-python3 main.py
+python3 main.py <input.ks>
 
 # Compile the C to an executable
 make
