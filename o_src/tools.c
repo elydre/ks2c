@@ -14,8 +14,6 @@
 
 #include "ks.h"
 
-obj_t NONE_OBJ = {.type = NONE};
-
 /*****************************************
  *                                      *
  *     memory allocation functions      *
@@ -111,44 +109,34 @@ void fi_free_all(void) {
  *                                      *
 *****************************************/
 
-obj_t *fi_new_string_obj(char *s) {
+fast_t fi_new_none_obj() {
+    return (fast_t) {.type = NONE};
+}
+
+fast_t fi_new_integer_obj(int i) {
+    return (fast_t) {.type = INTEGER, .int_val = i};
+}
+
+fast_t fi_new_float_obj(float f) {
+    return (fast_t) {.type = FLOAT, .flt_val = f};
+}
+
+fast_t fi_new_string_obj(char *s) {
     obj_t *o = fi_get_address();
-    o->type = STRING;
     o->str_ptr = s;
     o->ref_count = 0;
-    return o;
+    return (fast_t) {.type = STRING, .obj_ptr = o};
 }
 
-obj_t *fi_new_allocated_string_obj(char *p) {
+fast_t fi_new_allocated_string_obj(char *p) {
     obj_t *o = fi_get_address();
-    o->type = ALLOCATED_STRING;
     o->str_ptr = p;
     o->ref_count = 0;
-    return o;
+    return (fast_t) {.type = ALLOCATED_STRING, .obj_ptr = o};
 }
 
-obj_t *fi_new_integer_obj(int i) {
-    obj_t *o = fi_get_address();
-    o->type = INTEGER;
-    o->int_val = i;
-    o->ref_count = 0;
-    return o;
-}
-
-obj_t *fi_new_boolean_obj(int b) {
-    obj_t *o = fi_get_address();
-    o->type = BOOLEAN;
-    o->int_val = b;
-    o->ref_count = 0;
-    return o;
-}
-
-obj_t *fi_new_float_obj(float f) {
-    obj_t *o = fi_get_address();
-    o->type = FLOAT;
-    o->flt_val = f;
-    o->ref_count = 0;
-    return o;
+fast_t fi_new_boolean_obj(int b) {
+    return (fast_t) {.type = BOOLEAN, .int_val = b};
 }
 
 /*****************************************
@@ -157,19 +145,22 @@ obj_t *fi_new_float_obj(float f) {
  *                                      *
 *****************************************/
 
-void fi_clean_obj(obj_t *o) {
-    if (o->ref_count > 0 || o->type == NONE) {
+void fi_clean_obj(fast_t o) {
+    if (o.type != ALLOCATED_STRING && o.type != STRING) {
         return;
     }
-    if (o->type == ALLOCATED_STRING) {
-        free(o->str_ptr);
+
+    if (o.type == ALLOCATED_STRING) {
+        free(o.obj_ptr->str_ptr);
     }
-    fi_free_address(o);
+    fi_free_address(o.obj_ptr);
 }
 
 void fi_clean_up(vars_t *vars) {
     for (int j = 0; j < vars->len; j++) {
-        vars->arr[j]->ref_count = 0;
+        if (vars->arr[j].type == ALLOCATED_STRING || vars->arr[j].type == STRING) {
+            vars->arr[j].obj_ptr->ref_count = 0;
+        }
         fi_clean_obj(vars->arr[j]);
     }
     free(vars->arr);
@@ -182,27 +173,32 @@ void fi_clean_up(vars_t *vars) {
  *                                      *
 *****************************************/
 
-void fi_create_var(vars_t *vars, int var_id, obj_t *o) { 
+void fi_create_var(vars_t *vars, int var_id, fast_t o) { 
     if (vars->len <= var_id) {
-        vars->arr = realloc(vars->arr, sizeof(obj_t *) * (var_id + 1));
+        vars->arr = realloc(vars->arr, sizeof(fast_t) * (var_id + 1));
         for (int i = vars->len; i <= var_id; i++) {
-            vars->arr[i] = &NONE_OBJ;
+            vars->arr[i] = fi_new_none_obj();
         }
         vars->len = var_id + 1;
     }
-    vars->arr[var_id]->ref_count--;
-    fi_clean_obj(vars->arr[var_id]);
+    if (vars->arr[var_id].type == ALLOCATED_STRING || vars->arr[var_id].type == STRING) {
+        vars->arr[var_id].obj_ptr->ref_count--;
+        fi_clean_obj(vars->arr[var_id]);
+    }
 
     vars->arr[var_id] = o;
-    o->ref_count++;
+    if (o.type == ALLOCATED_STRING || o.type == STRING) {
+        o.obj_ptr->ref_count++;
+    }
 }
 
 
 #if BYPASS_GETVAR
 #else
-obj_t *fi_get_var(vars_t *vars, int var_id) {
+fast_t fi_get_var(vars_t *vars, int var_id) {
     if (vars->len <= var_id) {
-        return &NONE_OBJ;
+        printf("fi_get_var: var_id [%d] out of range\n", var_id);
+        return fi_new_none_obj();
     }
 
     return vars->arr[var_id];
@@ -234,49 +230,56 @@ char *fi_get_type(char type) {
     }
 }
 
-int fi_is(obj_t *o) {
-    int ret = 0;
+int fi_is(fast_t o) {
+    int ret;
     if (
-        o->type == ALLOCATED_STRING ||
-        o->type == STRING
+        o.type == INTEGER ||
+        o.type == BOOLEAN
     ) {
-        if (o->str_ptr != NULL && o->str_ptr[0])
-            ret = 1;
-    } else if (
-        o->type == INTEGER ||
-        o->type == BOOLEAN
+        return o.int_val != 0;
+    } else if (o.type == FLOAT) {
+        return o.flt_val != 0.0;
+    } else if (o.type == NONE) {
+        return 0;
+    }
+
+    ret = 0;
+    if (
+        o.type == ALLOCATED_STRING ||
+        o.type == STRING
     ) {
-        ret = o->int_val != 0;
-    }
-    else if (o->type == FLOAT) {
-        ret = o->flt_val != 0.0;
-    }
-    else if (o->type == NONE) {
-        ret = 0;
-    }
-    else {
-        printf("fi_is: unknown type [%d]\n", o->type);
+        if (o.obj_ptr->str_ptr != NULL) {
+            ret = strlen(o.obj_ptr->str_ptr) > 0;
+        }
+    } else {
+        printf("fi_is: unknown type [%d]\n", o.type);
     }
     fi_clean_obj(o);
     return ret;
 }
 
-int fi_int_val(obj_t *o) {
-    int ret = 0;
-    if (o->type == INTEGER) {
-        ret = o->int_val;
-    } else if (o->type == FLOAT) {
-        ret = (int) o->flt_val;
-    } else if (o->type == ALLOCATED_STRING) {
-        ret = atoi(o->str_ptr);
-    } else if (o->type == STRING) {
-        ret = atoi(o->str_ptr);
-    } else if (o->type == BOOLEAN) {
-        ret = o->int_val;
-    } else if (o->type == NONE) {
-        ret = 0;
+int fi_int_val(fast_t o) {
+    int ret;
+    if (o.type == INTEGER) {
+        return o.int_val;
+    } else if (o.type == FLOAT) {
+        return (int) o.flt_val;
+    } else if (o.type == BOOLEAN) {
+        return o.int_val;
+    } else if (o.type == NONE) {
+        return 0;
+    }
+
+    ret = 0;
+    if (
+        o.type == ALLOCATED_STRING ||
+        o.type == STRING
+    ) {
+        if (o.obj_ptr->str_ptr != NULL) {
+            ret = atoi(o.obj_ptr->str_ptr);
+        }
     } else {
-        printf("fi_int_val: unknown type [%d]\n", o->type);
+        printf("fi_int_val: unknown type [%d]\n", o.type);
     }
     fi_clean_obj(o);
     return ret;
