@@ -78,6 +78,7 @@ void fi_free_address(obj_t *o) {
 void fi_free_all(void) {
     #if CUSTOM_MALLOC
     chain_t *tmp = chain_head;
+
     while (tmp != NULL) {
         chain_t *next = tmp->next;
         free(tmp->addr);
@@ -86,13 +87,21 @@ void fi_free_all(void) {
     }
     chain_head = NULL;
 
+    int chain_len = 0;
     tmp = used_chain_head;
     while (tmp != NULL) {
         chain_t *next = tmp->next;
+        chain_len++;
         free(tmp);
         tmp = next;
     }
     used_chain_head = NULL;
+
+    if (chain_len) {
+        printf("fi_free_all: possible memory leak,"
+            "%d objects found in used_chain\n", chain_len);
+    }
+
     #endif
 }
 

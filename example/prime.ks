@@ -1,5 +1,5 @@
 5 > $n
-$n -= 999 999 > WHILE
+$n -= 999999 > WHILE
     $n + 2 > $n
     $n % 2 == 0, $n % 3 == 0 >> or > IF
         CONTINUE
@@ -17,7 +17,7 @@ $n -= 999 999 > WHILE
         END
         $i + 4 > $i
     END
-    $i > not > IF
+    $i > IF
         $n > print
     END
 END
