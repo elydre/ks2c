@@ -23,7 +23,7 @@
 #define VERSION "2.3"
 
 #define CUSTOM_MALLOC 1
-#define BYPASS_GETVAR 0
+#define BYPASS_GETVAR 1
 
 #ifndef UNUSED
 #define UNUSED(x) (void)(x)
@@ -75,12 +75,13 @@ int fi_is(fast_t o);
 int fi_int_val(fast_t o);
 char *fi_get_type(char type);
 
-fast_t fi_new_none_obj();
+#define fi_new_none_obj() ((fast_t){.type = NONE})
+#define fi_new_integer_obj(i) ((fast_t){.type = INTEGER, .int_val = i})
+#define fi_new_float_obj(f) ((fast_t){.type = FLOAT, .flt_val = f})
+#define fi_new_boolean_obj(b) ((fast_t){.type = BOOLEAN, .int_val = b})
+
 fast_t fi_new_string_obj(char *s);
 fast_t fi_new_allocated_string_obj(char *p);
-fast_t fi_new_integer_obj(int i);
-fast_t fi_new_boolean_obj(int b);
-fast_t fi_new_float_obj(float f);
 
 // fcm.c
 fast_t f_print(int n, ...);

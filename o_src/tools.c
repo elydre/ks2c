@@ -109,18 +109,6 @@ void fi_free_all(void) {
  *                                      *
 *****************************************/
 
-fast_t fi_new_none_obj() {
-    return (fast_t) {.type = NONE};
-}
-
-fast_t fi_new_integer_obj(int i) {
-    return (fast_t) {.type = INTEGER, .int_val = i};
-}
-
-fast_t fi_new_float_obj(float f) {
-    return (fast_t) {.type = FLOAT, .flt_val = f};
-}
-
 fast_t fi_new_string_obj(char *s) {
     obj_t *o = fi_get_address();
     o->str_ptr = s;
@@ -133,10 +121,6 @@ fast_t fi_new_allocated_string_obj(char *p) {
     o->str_ptr = p;
     o->ref_count = 0;
     return (fast_t) {.type = ALLOCATED_STRING, .obj_ptr = o};
-}
-
-fast_t fi_new_boolean_obj(int b) {
-    return (fast_t) {.type = BOOLEAN, .int_val = b};
 }
 
 /*****************************************
