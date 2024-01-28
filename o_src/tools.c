@@ -157,7 +157,7 @@ void fi_clean_up(vars_t *vars) {
  *                                      *
 *****************************************/
 
-void fi_create_var(vars_t *vars, int var_id, fast_t o) { 
+void ff_set_var(vars_t *vars, int var_id, fast_t o) { 
     if (vars->len <= var_id) {
         vars->arr = realloc(vars->arr, sizeof(fast_t) * (var_id + 1));
         for (int i = vars->len; i <= var_id; i++) {
@@ -165,6 +165,7 @@ void fi_create_var(vars_t *vars, int var_id, fast_t o) {
         }
         vars->len = var_id + 1;
     }
+
     if (vars->arr[var_id].type == ALLOCATED_STRING || vars->arr[var_id].type == STRING) {
         vars->arr[var_id].obj_ptr->ref_count--;
         fi_clean_obj(vars->arr[var_id]);
@@ -214,14 +215,9 @@ char *fi_get_type(char type) {
     }
 }
 
-int fi_is(fast_t o) {
+int ff_is(fast_t o) {
     int ret;
-    if (
-        o.type == INTEGER ||
-        o.type == BOOLEAN
-    ) {
-        return o.int_val != 0;
-    } else if (o.type == FLOAT) {
+    if (o.type == FLOAT) {
         return o.flt_val != 0.0;
     } else if (o.type == NONE) {
         return 0;

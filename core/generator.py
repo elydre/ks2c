@@ -102,9 +102,9 @@ class Generator:
                 if ast['arg'][0]['type'] == "keyword" and ast['arg'][0]['cnt'] == "LOOP":
                     out = self.convert_to_c(ast['arg'][0], first = True, func = func)
                     out += "\n" + " " * (self.indent + 1) * 4
-                    out += f"fi_create_var(&local_vars, {var_index}, fi_new_integer_obj(i));"
+                    out += f"fi_set_var(&local_vars, {var_index}, fi_new_integer_obj(i));"
                 else:
-                    out += f"fi_create_var(&local_vars, {var_index}, {self.convert_to_c(ast['arg'][0], func = func)});"
+                    out += f"fi_set_var(&local_vars, {var_index}, {self.convert_to_c(ast['arg'][0], func = func)});"
             else:
                 out += f"fi_get_var(&local_vars, {var_index})"
 
