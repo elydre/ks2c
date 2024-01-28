@@ -200,6 +200,31 @@ obj_t *fi_get_var(vars_t *vars, int var_id) {
 }
 #endif
 
+/*****************************************
+ *                                      *
+ *           tools functions            *
+ *                                      *
+*****************************************/
+
+char *fi_get_type(char type) {
+    switch (type) {
+        case INTEGER:
+            return "int";
+        case STRING:
+            return "str";
+        case ALLOCATED_STRING:
+            return "str";
+        case BOOLEAN:
+            return "bool";
+        case FLOAT:
+            return "float";
+        case NONE:
+            return "none";
+        default:
+            return "unknown";
+    }
+}
+
 int fi_is(obj_t *o) {
     int ret = 0;
     if (

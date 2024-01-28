@@ -69,6 +69,7 @@ void   fi_create_var(vars_t *vars, int var_id, obj_t *o);
 
 int fi_is(obj_t *o);
 int fi_int_val(obj_t *o);
+char *fi_get_type(char type);
 
 obj_t *fi_new_string_obj(char *s);
 obj_t *fi_new_allocated_string_obj(char *p);

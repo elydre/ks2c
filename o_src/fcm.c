@@ -48,22 +48,7 @@ obj_t *f_print(int n, ...) {
 
 obj_t *f_type(int n, obj_t *a) {
     UNUSED(n);
-    obj_t *res;
-
-    if (a->type == INTEGER)
-        res = fi_new_string_obj("int");
-    else if (a->type == STRING)
-        res = fi_new_string_obj("str");
-    else if (a->type == ALLOCATED_STRING)
-        res = fi_new_string_obj("str");
-    else if (a->type == BOOLEAN)
-        res = fi_new_string_obj("bool");
-    else if (a->type == FLOAT)
-        res = fi_new_string_obj("float");
-    else if (a->type == NONE)
-        res = fi_new_string_obj("none");
-    else
-        res = fi_new_string_obj("unknown");
+    obj_t *res = fi_new_string_obj(fi_get_type(a->type));
     fi_clean_obj(a);
     return res;
 }
@@ -96,7 +81,7 @@ obj_t *f_int(int n, obj_t *a) {
     } else if (a->type == NONE) {
         res = 0;
     } else {
-        printf("error: unsupported type for int [%d]\n", a->type);
+        printf("f_int: unsupported type [%s]\n", fi_get_type(a->type));
         fi_clean_obj(a);
         return &NONE_OBJ;
     }
@@ -121,7 +106,7 @@ obj_t *f_float(int n, obj_t *a) {
     } else if (a->type == NONE) {
         res = 0;
     } else {
-        printf("error: unsupported type for float [%d]\n", a->type);
+        printf("f_float: unsupported type [%s]\n", fi_get_type(a->type));
         fi_clean_obj(a);
         return &NONE_OBJ;
     }
@@ -152,7 +137,7 @@ obj_t *f_str(int n, obj_t *a) {
         res = malloc(5);
         sprintf(res, "%s", "none");
     } else {
-        printf("error: unsupported type for str [%d]\n", a->type);
+        printf("f_str: unsupported type [%s]\n", fi_get_type(a->type));
         fi_clean_obj(a);
         return &NONE_OBJ;
     }
@@ -187,7 +172,7 @@ obj_t *f_add(int n, obj_t *a, obj_t *b) {
         strcat(buf, b->str_ptr);
         res = fi_new_allocated_string_obj(buf);
     } else {
-        printf("error: unsupported type for add [%d] [%d]\n", a->type, b->type);
+        printf("f_add: no method to compute [%s] + [%s]\n", fi_get_type(a->type), fi_get_type(b->type));
         res = &NONE_OBJ;
     }
 
@@ -209,7 +194,7 @@ obj_t *f_sub(int n, obj_t *a, obj_t *b) {
     } else if (a->type == FLOAT && b->type == INTEGER) {
         res = fi_new_float_obj(a->flt_val - b->int_val);
     } else {
-        printf("error: unsupported type for sub [%d] [%d]\n", a->type, b->type);
+        printf("f_sub: no method to compute [%s] - [%s]\n", fi_get_type(a->type), fi_get_type(b->type));
         res = &NONE_OBJ;
     }
 
@@ -231,7 +216,7 @@ obj_t *f_mul(int n, obj_t *a, obj_t *b) {
     } else if (a->type == FLOAT && b->type == INTEGER) {
         res = fi_new_float_obj(a->flt_val * b->int_val);
     } else {
-        printf("error: unsupported type for mul [%d] [%d]\n", a->type, b->type);
+        printf("f_mul: no method to compute [%s] * [%s]\n", fi_get_type(a->type), fi_get_type(b->type));
         res = &NONE_OBJ;
     }
 
@@ -247,7 +232,7 @@ obj_t *f_mod(int n, obj_t *a, obj_t *b) {
     if (a->type == INTEGER && b->type == INTEGER) {
         res = fi_new_integer_obj(a->int_val % b->int_val);
     } else {
-        printf("error: unsupported type for mod [%d] [%d]\n", a->type, b->type);
+        printf("f_mod: no method to compute [%s] %% [%s]\n", fi_get_type(a->type), fi_get_type(b->type));
         res = &NONE_OBJ;
     }
 
@@ -269,7 +254,7 @@ obj_t *f_div(int n, obj_t *a, obj_t *b) {
     } else if (a->type == FLOAT && b->type == INTEGER) {
         res = fi_new_float_obj(a->flt_val / b->int_val);
     } else {
-        printf("error: unsupported type for div [%d] [%d]\n", a->type, b->type);
+        printf("f_div: no method to compute [%s] / [%s]\n", fi_get_type(a->type), fi_get_type(b->type));
         res = &NONE_OBJ;
     }
 
@@ -302,7 +287,7 @@ obj_t *f_eql(int n, obj_t *a, obj_t *b) {
     ) {
         res = fi_new_boolean_obj(strcmp(a->str_ptr, b->str_ptr) == 0);
     } else {
-        printf("error: unsupported type for eql [%d] [%d]\n", a->type, b->type);
+        printf("f_eql: no method to compute [%s] == [%s]\n", fi_get_type(a->type), fi_get_type(b->type));
         res = &NONE_OBJ;
     }
 
@@ -335,7 +320,7 @@ obj_t *f_inf(int n, obj_t *a, obj_t *b) {
     } else if (a->type == FLOAT && b->type == INTEGER) {
         res = fi_new_boolean_obj(a->flt_val < b->int_val);
     } else {
-        printf("error: unsupported type for inf [%d] [%d]\n", a->type, b->type);
+        printf("f_inf: no method to compute [%s] -= [%s]\n", fi_get_type(a->type), fi_get_type(b->type));
         res = &NONE_OBJ;
     }
 
@@ -357,7 +342,7 @@ obj_t *f_sup(int n, obj_t *a, obj_t *b) {
     } else if (a->type == FLOAT && b->type == INTEGER) {
         res = fi_new_boolean_obj(a->flt_val > b->int_val);
     } else {
-        printf("error: unsupported type for sup [%d] [%d]\n", a->type, b->type);
+        printf("f_sup: no method to compute [%s] += [%s]\n", fi_get_type(a->type), fi_get_type(b->type));
         res = &NONE_OBJ;
     }
 
@@ -383,7 +368,7 @@ obj_t *f_not(int n, obj_t *a) {
     } else if (a->type == FLOAT) {
         res = fi_new_boolean_obj(!a->flt_val);
     } else {
-        printf("error: unsupported type for not [%d]\n", a->type);
+        printf("f_not: unsupported type [%d]\n", a->type);
         res = &NONE_OBJ;
     }
 
@@ -401,7 +386,7 @@ obj_t *f_or(int n, obj_t *a, obj_t *b) {
     ) {
         res = fi_new_boolean_obj(a->int_val || b->int_val);
     } else {
-        printf("error: unsupported type for or [%d] [%d]\n", a->type, b->type);
+        printf("f_or: no method to compute [%s] or [%s]\n", fi_get_type(a->type), fi_get_type(b->type));
         res = &NONE_OBJ;
     }
 
@@ -421,7 +406,7 @@ obj_t *f_and(int n, obj_t *a, obj_t *b) {
     ) {
         res = fi_new_boolean_obj(a->int_val && b->int_val);
     } else {
-        printf("error: unsupported type for and [%d] [%d]\n", a->type, b->type);
+        printf("f_and: no method to compute [%s] and [%s]\n", fi_get_type(a->type), fi_get_type(b->type));
         res = &NONE_OBJ;
     }
 
