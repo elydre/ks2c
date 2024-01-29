@@ -8,7 +8,7 @@ OBJS	= $(SRCS:.c=.o)
 
 CC		= gcc
 RM		= rm -f
-CFLAGS	= -Wall -Wextra -Werror
+CFLAGS	= -Wno-unused-variable -Wall -Wextra -Werror
 
 NAME	= prog.out
 

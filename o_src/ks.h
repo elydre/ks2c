@@ -20,7 +20,9 @@
 #include <stdarg.h>
 #include <stdio.h>
 
-#define VERSION "2.3"
+#include "ks_def.h"
+
+#define VERSION "2.4"
 
 #define CUSTOM_MALLOC 1
 #define BYPASS_GETVAR 1
@@ -75,7 +77,10 @@ void   ff_set_var(vars_t *vars, int var_id, fast_t o);
 #define fi_is(o) (o.type == INTEGER || o.type == BOOLEAN ? o.int_val != 0 : ff_is(o))
 
 #if FAST_INT_VARS
-#define fi_set_var(vars, var_id, o) ((vars)->len > var_id ? ((vars)->arr[var_id].type == INTEGER && o.type == INTEGER ? ((vars)->arr[var_id].int_val = o.int_val) : ff_set_var(vars, var_id, o)) : ff_set_var(vars, var_id, o))
+#define fi_set_var(vars, var_id, o) ((vars)->len > var_id ? \
+        ((vars)->arr[var_id].type == INTEGER && o.type == INTEGER ? \
+        ((vars)->arr[var_id].int_val = o.int_val) : \
+        ff_set_var(vars, var_id, o)) : ff_set_var(vars, var_id, o))
 #else
 #define fi_set_var(vars, var_id, o) ff_set_val(vars, var_id, o)
 #endif
@@ -93,34 +98,27 @@ fast_t fi_new_string_obj(char *s);
 fast_t fi_new_allocated_string_obj(char *p);
 
 // fcm.c
-fast_t f_print(int n, ...);
-fast_t f_type(int n, fast_t a);
-fast_t f_pass(int n, fast_t a);
+fast_t ff_print(int n, ...);
+fast_t ff_type(int n, fast_t a);
+fast_t ff_pass(int n, fast_t a);
 
-fast_t f_int(int n, fast_t a);
-fast_t f_str(int n, fast_t a);
-fast_t f_float(int n, fast_t a);
+fast_t ff_int(int n, fast_t a);
+fast_t ff_str(int n, fast_t a);
+fast_t ff_float(int n, fast_t a);
 
-#define f_add(n, a, b) (a.type == INTEGER && b.type == INTEGER ? fi_new_integer_obj(a.int_val + b.int_val) : ff_add(n, a, b))
-#define f_eql(n, a, b) (a.type == INTEGER && b.type == INTEGER ? fi_new_boolean_obj(a.int_val == b.int_val) : ff_eql(n, a, b))
-#define f_mod(n, a, b) (a.type == INTEGER && b.type == INTEGER ? fi_new_integer_obj(a.int_val % b.int_val) : ff_mod(n, a, b))
-#define f_mul(n, a, b) (a.type == INTEGER && b.type == INTEGER ? fi_new_integer_obj(a.int_val * b.int_val) : ff_mul(n, a, b))
-#define f_inf(n, a, b) (a.type == INTEGER && b.type == INTEGER ? fi_new_boolean_obj(a.int_val < b.int_val) : ff_inf(n, a, b))
-#define f_or(n, a, b) ((a.type == INTEGER || a.type == BOOLEAN) && (b.type == INTEGER || b.type == BOOLEAN) ? fi_new_boolean_obj(a.int_val || b.int_val) : ff_or(n, a, b))
-
-fast_t f_sub(int n, fast_t a, fast_t b);
+fast_t ff_sub(int n, fast_t a, fast_t b);
 fast_t ff_add(int n, fast_t a, fast_t b);
 fast_t ff_mul(int n, fast_t a, fast_t b);
 fast_t ff_mod(int n, fast_t a, fast_t b);
-fast_t f_div(int n, fast_t a, fast_t b);
+fast_t ff_div(int n, fast_t a, fast_t b);
 
 fast_t ff_eql(int n, fast_t a, fast_t b);
-fast_t f_neq(int n, fast_t a, fast_t b);
+fast_t ff_neq(int n, fast_t a, fast_t b);
 fast_t ff_inf(int n, fast_t a, fast_t b);
-fast_t f_sup(int n, fast_t a, fast_t b);
+fast_t ff_sup(int n, fast_t a, fast_t b);
 
-fast_t f_not(int n, fast_t a);
+fast_t ff_not(int n, fast_t a);
 fast_t ff_or(int n, fast_t a, fast_t b);
-fast_t f_and(int n, fast_t a, fast_t b);
+fast_t ff_and(int n, fast_t a, fast_t b);
 
 #endif

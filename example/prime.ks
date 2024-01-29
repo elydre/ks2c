@@ -1,7 +1,7 @@
 5 > $n
 $n -= 999999 > WHILE
     $n + 2 > $n
-    $n % 2 == 0, $n % 3 == 0 >> or > IF
+    $n % 3 == 0 > IF
         CONTINUE
     END
     5 > $i
