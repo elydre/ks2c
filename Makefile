@@ -8,11 +8,11 @@ OBJS	= $(SRCS:.c=.o)
 
 CC		= gcc
 RM		= rm -f
-CFLAGS	= -Wno-unused-variable -Wall -Wextra -Werror
+CFLAGS	= -Wno-unused-variable -Wall -Wextra -Werror -g
 
 NAME	= prog.out
 
-COL_CC	= \033[0;30m
+COL_CC	= \033[0;90m
 COL_RE	= \033[0m
 
 $(NAME): $(OBJS)
