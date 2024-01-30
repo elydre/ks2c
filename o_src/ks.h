@@ -77,12 +77,12 @@ void   ff_set_var(vars_t *vars, int var_id, fast_t o);
 #define fi_is(o) (o.type == INTEGER || o.type == BOOLEAN ? o.int_val != 0 : ff_is(o))
 
 #if FAST_INT_VARS
-#define fi_set_var(vars, var_id, o) ((vars)->len > var_id ? \
-        ((vars)->arr[var_id].type == INTEGER && o.type == INTEGER ? \
-        ((vars)->arr[var_id].int_val = o.int_val) : \
-        ff_set_var(vars, var_id, o)) : ff_set_var(vars, var_id, o))
+#define fi_set_var(vars, var_id, o) (a0 = o, (vars)->len > var_id ? \
+        ((vars)->arr[var_id].type == INTEGER && a0.type == INTEGER ? \
+        ((vars)->arr[var_id].int_val = a0.int_val) : \
+        ff_set_var(vars, var_id, a0)) : ff_set_var(vars, var_id, a0))
 #else
-#define fi_set_var(vars, var_id, o) ff_set_val(vars, var_id, o)
+#define fi_set_var(vars, var_id, o) ff_set_var(vars, var_id, o)
 #endif
 
 int ff_is(fast_t o);
