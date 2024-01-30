@@ -58,7 +58,7 @@
         (b##lvl.type==INTEGER || b##lvl.type==BOOLEAN) ? \
         fi_new_boolean_obj(a##lvl.int_val && b##lvl.int_val) : ff_and(n,a##lvl,b##lvl))
 
-#define f_not(n,f1) (a=f1, (a##lvl.type==INTEGER || a##lvl.type==BOOLEAN) ? \
-        fi_new_boolean_obj(!a##lvl.int_val) : ff_not(n,a))
+#define f_not(lvl, n,f1) (a##lvl=f1, (a##lvl.type==INTEGER || a##lvl.type==BOOLEAN) ? \
+        fi_new_boolean_obj(!a##lvl.int_val) : ff_not(n,a##lvl))
 
 #endif

@@ -138,8 +138,6 @@ void fi_clean_obj(fast_t o) {
         return;
     }
 
-    printf("fi_clean_obj: cleaning object %s\n", o.obj_ptr->str_ptr);
-
     if (o.type == ALLOCATED_STRING) {
         free(o.obj_ptr->str_ptr);
     }
